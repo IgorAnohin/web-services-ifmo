@@ -6,16 +6,19 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.SequenceGenerator
 import jakarta.persistence.Table
 import java.time.LocalDate
 import ru.anokhin.core.converter.StringListAttributeConverter
+import ru.anokhin.core.model.jpa.Book.Companion.TABLE_NAME
 
 @Entity
-@Table(name = "book")
+@Table(name = TABLE_NAME)
 open class Book {
 
     @get:Id
-    @get:GeneratedValue(strategy = GenerationType.IDENTITY)
+    @get:GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "${TABLE_NAME}_seq")
+    @get:SequenceGenerator(name = "${TABLE_NAME}_seq", sequenceName = "seq_$TABLE_NAME", allocationSize = 1)
     @get:Column(name = "id", nullable = false)
     open var id: Long? = null
 
@@ -51,6 +54,8 @@ open class Book {
     override fun toString(): String = "Book(id=$id)"
 
     companion object {
+
+        const val TABLE_NAME: String = "book"
 
         const val ID: String = "id"
 
