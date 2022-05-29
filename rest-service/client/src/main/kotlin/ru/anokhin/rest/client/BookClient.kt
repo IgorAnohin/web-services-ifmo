@@ -40,10 +40,12 @@ private fun isValidatedStatusCode(status: HttpStatusCode): Boolean = when {
     else -> true
 }
 
-private fun HttpResponse.hasServiceException(): Boolean {
-    if (status == HttpStatusCode.BadRequest) return true
-    return false
-}
+private suspend fun HttpResponse.getErrorResponseOrNull(): ErrorResponse? =
+    try {
+        body()
+    } catch (ex: Exception) {
+        null
+    }
 
 class BookClient {
 
@@ -72,10 +74,9 @@ class BookClient {
             validateResponse block@{ response ->
                 if (!isValidatedStatusCode(response.status)) return@block
 
-                if (response.hasServiceException()) {
-                    val errorResponse: ErrorResponse = response.body()
-                    throw errorResponse.asServiceException()
-                }
+                response.getErrorResponseOrNull()
+                    ?.asServiceException()
+                    ?.let { throw it }
             }
         }
 
