@@ -1,5 +1,5 @@
-
 Install PostgreSQL using Docker
+
 ```shell
 # Create directory for PostgreSQL database
 PGDIR=$HOME/Data/books-pgsql
@@ -17,17 +17,34 @@ docker run -d --restart unless-stopped --name "books-pgsql" \
 ```
 
 Download Glassfish and start domain
+
 ```shell
-TEMP_DIR=$(mktemp -d)
-wget -O $TEMP_DIR/'glassfish-6.2.5.zip' 'https://www.eclipse.org/downloads/download.php?file=/ee4j/glassfish/glassfish-6.2.5.zip'
-unzip $TEMP_DIR/glassfish-6.2.5.zip -d $TEMP_DIR
-GLASSFISH_BIN="$TEMP_DIR/glassfish6/bin"
+INSTALL_DIR=$(mktemp -d)
+wget -O $INSTALL_DIR/'glassfish-6.2.5.zip' \
+    'https://www.eclipse.org/downloads/download.php?file=/ee4j/glassfish/glassfish-6.2.5.zip'
+unzip $INSTALL_DIR/glassfish-6.2.5.zip -d $INSTALL_DIR
 
-wget -O $TEMP_DIR/postgresql-42.3.5.jar 'https://repo1.maven.org/maven2/org/postgresql/postgresql/42.3.5/postgresql-42.3.5.jar'
-mv $TEMP_DIR/postgresql-42.3.5.jar $GLASSFISH_BIN/glassfish/lib
+GLASSFISH_HOME="$INSTALL_DIR/glassfish6"
+wget -O $GLASSFISH_HOME/glassfish/lib/postgresql-42.3.5.jar \
+    'https://repo1.maven.org/maven2/org/postgresql/postgresql/42.3.5/postgresql-42.3.5.jar'
+```
 
-$GLASSFISH_BIN/asadmin create-domain --adminport 4848 --nopassword=true anokhin
-$GLASSFISH_BIN/asadmin start-domain anokhin
+Then you need to add executable to `PATH`
+
+```shell
+export PATH="$GLASSFISH_HOME/bin:$PATH"
+```
+
+... or make an alias
+```shell
+alias asadmin="$GLASSFISH_HOME/bin/asadmin"
+```
+
+After Glassfish was installed, new domain without password should be created and started
+
+```shell
+asadmin create-domain --adminport 4848 --nopassword=true anokhin
+asadmin start-domain anokhin
 ```
 
 Then open <http://localhost:4848> and configure JDBC DataSource
@@ -39,30 +56,47 @@ Then open <http://localhost:4848> and configure JDBC DataSource
 ![Glassfish default JDBC resource](docs/img/glassfish_default_jdbc_resource.png)
 
 Then you need to build artifacts
+
 ```shell
 git clone <repository_url> web-services-technologies-anokhin
 cd web-services-technologies-anokhin
 ./gradlew build
 
 git clone https://github.com/eclipse/transformer.git transformer
+git config --global --add safe.directory $PWD/transformer
 cd transformer
+git checkout 0.4.0
 mvn package
 cd -
 ```
 
 Deploy JAX WS service
+
 ```shell
-$GLASSFISH_BIN/asadmin deploy \
-    --contextroot /jaxws \
-    jax-ws-service/bundles/j2ee/build/libs/jaxws-j2ee-*.war
+VERSION=$(awk -F= '$1=="version"{print $2}' gradle.properties)
+WAR_FILENAME="jaxws-j2ee-${VERSION}.war"
+
+./gradlew build
+asadmin undeploy ${WAR_FILENAME%.*} 2> /dev/null >&2 || true
+asadmin deploy \
+    --contextroot '/jaxws' \
+    jax-ws-service/bundles/j2ee/build/libs/${WAR_FILENAME}
 ```
 
 Deploy REST service
+
 ```shell
-transformer/org.eclipse.transformer.cli/target/org.eclipse.transformer.cli-*.jar \
-    rest-service/bundles/j2ee/build/libs/rest-j2ee-*.war
+VERSION=$(awk -F= '$1=="version"{print $2}' gradle.properties)
+WAR_FILENAME="replaced-rest-j2ee-${VERSION}.war"
+TRANSFORMER_CLI="$PWD/transformer/org.eclipse.transformer.cli/target/org.eclipse.transformer.cli-0.4.0.jar"
+
+./gradlew build
+$TRANSFORMER_CLI --overwrite \
+    rest-service/bundles/j2ee/build/libs/rest-j2ee-${VERSION}.war \
+    rest-service/bundles/j2ee/build/libs/${WAR_FILENAME}
     
-$GLASSFISH_BIN/asadmin deploy \
-    --contextroot /rest \
-    rest-service/bundles/j2ee/build/libs/output_rest-j2ee-*.war
+asadmin undeploy ${WAR_FILENAME%.*} 2> /dev/null >&2 || true
+asadmin deploy \
+    --contextroot '/rest' \
+    rest-service/bundles/j2ee/build/libs/${WAR_FILENAME}
 ```
