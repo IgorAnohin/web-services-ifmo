@@ -19,8 +19,11 @@ import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.URLProtocol
+import io.ktor.http.appendPathSegments
 import io.ktor.http.contentType
 import io.ktor.http.isSuccess
+import io.ktor.http.path
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
@@ -46,7 +49,12 @@ class BookClient {
 
     private val client: HttpClient = HttpClient(CIO) {
         defaultRequest {
-            url("http://0.0.0.0:8080/rest/api/v1/books")
+            with(url) {
+                protocol = URLProtocol.HTTP
+                host = "0.0.0.0"
+                port = 8080
+                path("rest", "api", "v1", "books")
+            }
         }
         Charsets {
             register(Charsets.UTF_8)
@@ -62,9 +70,7 @@ class BookClient {
 
         HttpResponseValidator {
             validateResponse block@{ response ->
-                if (!isValidatedStatusCode(response.status)) {
-                    return@block
-                }
+                if (!isValidatedStatusCode(response.status)) return@block
 
                 if (response.hasServiceException()) {
                     val errorResponse: ErrorResponse = response.body()
@@ -80,7 +86,7 @@ class BookClient {
     }
 
     fun create(request: BookCreationRequest): Book = runBlocking {
-        client.post() {
+        client.post {
             contentType(ContentType.Application.Json)
             setBody(request)
         }.body()
@@ -90,14 +96,16 @@ class BookClient {
         bookId: Long,
         request: BookUpdateRequest,
     ): Book = runBlocking {
-        client.put("/$bookId") {
+        client.put {
+            url.appendPathSegments("books", bookId.toString())
             contentType(ContentType.Application.Json)
             setBody(request)
         }.body()
     }
 
     fun findByFilter(filter: BookFilter): List<Book> = runBlocking {
-        val response = client.post("/find-by-filter") {
+        val response = client.post {
+            url.appendPathSegments("books", "find-by-filter")
             contentType(ContentType.Application.Json)
             setBody(filter)
         }
@@ -109,11 +117,12 @@ class BookClient {
     }
 
     fun findById(id: Long): Book = runBlocking {
-        client.get("/$id").body()
+        client.get { url.appendPathSegments("books", id.toString()) }
+            .body()
     }
 
     fun deleteById(id: Long): Boolean = runBlocking {
-        val response = client.delete("/$id")
+        val response = client.delete { url.appendPathSegments("books", id.toString()) }
         when (response.status) {
             HttpStatusCode.OK -> true
             HttpStatusCode.NotFound -> false

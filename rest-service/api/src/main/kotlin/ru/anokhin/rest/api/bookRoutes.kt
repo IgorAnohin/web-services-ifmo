@@ -13,6 +13,8 @@ import io.ktor.server.routing.post
 import io.ktor.server.routing.put
 import io.ktor.server.routing.route
 import io.ktor.util.pipeline.PipelineContext
+import java.io.PrintWriter
+import java.io.StringWriter
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toKotlinLocalDate
 import ru.anokhin.core.ErrorCodes
@@ -160,6 +162,7 @@ private suspend inline fun <T> PipelineContext<Unit, ApplicationCall>.callServic
     )
 } catch (ex: Exception) {
     call.respond(
+        HttpStatusCode.InternalServerError,
         ErrorResponse(
             ErrorModel(
                 code = ErrorCodes.Books001UnknownError.code,
@@ -168,6 +171,12 @@ private suspend inline fun <T> PipelineContext<Unit, ApplicationCall>.callServic
                     if (ex.message != null) {
                         append(": ", ex.message)
                     }
+                    val stackTraceWriter = StringWriter().also { sw ->
+                        ex.printStackTrace(
+                            PrintWriter(sw)
+                        )
+                    }
+                    append(stackTraceWriter.toString())
                 }
             )
         )
