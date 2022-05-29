@@ -1,6 +1,11 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.kotlin.serialization)
+    application
+}
+
+application {
+    mainClass.set("ru.anokhin.rest.StandaloneMainKt")
 }
 
 dependencies {

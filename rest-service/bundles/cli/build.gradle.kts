@@ -1,3 +1,11 @@
+plugins {
+    application
+}
+
+application {
+    mainClass.set("ru.anokhin.rest.CliMainKt")
+}
+
 dependencies {
     implementation(projects.restService.client)
     implementation(libs.clikt)
