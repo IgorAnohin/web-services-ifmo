@@ -21,15 +21,6 @@ fun main(args: Array<String>) {
         "false"
     )
 
-//    val factory: SessionFactory = try {
-//        Configuration().configure().buildSessionFactory()
-//    } catch (ex: Throwable) {
-//        System.err.println("Failed to create sessionFactory object: ${ex.message}")
-//        ex.printStackTrace()
-//        throw ExceptionInInitializerError(ex)
-//    }
-//    val entityManager: EntityManager = factory.createEntityManager()
-
     val emf: EntityManagerFactory = Persistence.createEntityManagerFactory("ru.anokhin.jaxws")
     val entityManager: EntityManager = emf.createEntityManager()
 
