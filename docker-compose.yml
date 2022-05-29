@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  books-pgsql:
+    container_name: "books-pgsql"
+    image: "postgres:14.2"
+    environment:
+        - "POSTGRES_USER=books"
+        - "POSTGRES_PASSWORD=books"
+        - "POSTGRES_DB=books"
+        - "PGDATA=/var/lib/postgresql/data/pgdata"
+    ports:
+        - "5432:5432"
+    volumes:
+        - "/var/lib/postgresql/data"
+#     volumes_from:
+#       - postgres_data
+
+#   web:
+#     build: .
+#     command: python manage.py runserver 0.0.0.0:8000
+#     volumes:
+#       - .:/code
+#     ports:
+#       - "8000:8000"
+#     depends_on:
+#       - db
+
+  postgres_data:
+    image: busybox
+    volumes:
+      - ./postgres:/var/lib/postgresql/data

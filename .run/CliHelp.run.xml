@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="CliHelp" type="JetRunConfigurationType">
+    <option name="MAIN_CLASS_NAME" value="ru.anokhin.jaxws.CliMainKt" />
+    <module name="web-services-technologies-anokhin.jax-ws-service.cli.main" />
+    <option name="PROGRAM_PARAMETERS" value="create --help" />
+    <shortenClasspath name="NONE" />
+    <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+      <option name="credential" />
+      <option name="region" />
+      <option name="useCurrentConnection" value="false" />
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
