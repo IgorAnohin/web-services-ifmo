@@ -1,5 +1,6 @@
 package ru.anokhin.jaxws.service.impl
 
+import jakarta.inject.Inject
 import jakarta.jws.WebService
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -15,6 +16,7 @@ import ru.anokhin.jaxws.service.BookSoapService
 @WebService(name = "BookService", serviceName = "BookService")
 class BookSoapServiceImpl : BookSoapService {
 
+    @Inject
     lateinit var bookService: BookService
 
     override fun create(

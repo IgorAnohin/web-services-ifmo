@@ -2,6 +2,11 @@
 plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.jpa)
+    alias(libs.plugins.kotlin.allopen)
+}
+
+allOpen {
+    annotation("jakarta.inject.Singleton")
 }
 
 dependencies {
@@ -12,6 +17,7 @@ dependencies {
 
     api(libs.jakarta.annotationApi)
     api(libs.jakarta.persistenceApi)
+    api(libs.jakarta.injectApi)
     api(libs.jakarta.jwsApi)
 
     api(libs.kotlinLogging.jvm)

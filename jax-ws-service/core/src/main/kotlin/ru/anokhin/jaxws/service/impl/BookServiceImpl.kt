@@ -1,5 +1,7 @@
 package ru.anokhin.jaxws.service.impl
 
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 import jakarta.persistence.criteria.CriteriaBuilder
 import jakarta.persistence.criteria.CriteriaQuery
 import jakarta.persistence.criteria.Predicate
@@ -15,12 +17,13 @@ import ru.anokhin.jaxws.model.dto.BookSaveDto
 import ru.anokhin.jaxws.model.jpa.Book
 import ru.anokhin.jaxws.service.BookService
 
-class BookServiceImpl constructor(
-
-    private val bookDao: BookDao,
-) : BookService {
+@Singleton
+class BookServiceImpl : BookService {
 
     private val logger: KLogger = LoggerFactory.getLogger(this::class.java).toKLogger()
+
+    @Inject
+    lateinit var bookDao: BookDao
 
     override fun save(book: BookSaveDto): BookDto {
         logger.entry(book)

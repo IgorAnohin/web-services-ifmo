@@ -1,5 +1,7 @@
-dependencies {
-    compileOnly("javax:javaee-web-api:8.0.1")
+plugins {
+    war
+}
 
-    testImplementation(kotlin("test"))
+dependencies {
+    implementation(projects.jaxWsService.core)
 }

@@ -7,7 +7,7 @@ import jakarta.xml.ws.Endpoint
 import mu.KLogger
 import mu.KotlinLogging
 import ru.anokhin.jaxws.dao.BookDao
-import ru.anokhin.jaxws.dao.impl.BookDaoImpl
+import ru.anokhin.jaxws.dao.impl.StandaloneBookDao
 import ru.anokhin.jaxws.service.BookService
 import ru.anokhin.jaxws.service.BookSoapService
 import ru.anokhin.jaxws.service.impl.BookServiceImpl
@@ -21,11 +21,15 @@ fun main(args: Array<String>) {
         "false"
     )
 
-    val emf: EntityManagerFactory = Persistence.createEntityManagerFactory("ru.anokhin.jaxws")
-    val entityManager: EntityManager = emf.createEntityManager()
+    val entityManagerFactory: EntityManagerFactory = Persistence.createEntityManagerFactory("ru.anokhin.jaxws")
+    val entityManager: EntityManager = entityManagerFactory.createEntityManager()
 
-    val bookDao: BookDao = BookDaoImpl(entityManager)
-    val bookService: BookService = BookServiceImpl(bookDao)
+    val bookDao: BookDao = StandaloneBookDao().apply {
+        this.entityManager = entityManager
+    }
+    val bookService: BookService = BookServiceImpl().apply {
+        this.bookDao = bookDao
+    }
     val bookSoapService: BookSoapService = BookSoapServiceImpl().apply {
         this.bookService = bookService
     }
