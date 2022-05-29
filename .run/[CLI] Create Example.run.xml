@@ -1,7 +1,21 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="[CLI] Create Example" type="JetRunConfigurationType">
     <option name="MAIN_CLASS_NAME" value="ru.anokhin.jaxws.CliMainKt" />
-    <module name="web-services-technologies-anokhin.jax-ws-service.cli.main" />
+    <module name="web-services-technologies-anokhin.jax-ws-service.bundles.cli.main" />
+    <option name="PROGRAM_PARAMETERS" value="create --name Anokhin --author Parent1 --author Parent2 --publisher &quot;Human Entertaiment&quot; --publication-date 19-02-1999 --page-count 22" />
+    <shortenClasspath name="NONE" />
+    <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+      <option name="credential" />
+      <option name="region" />
+      <option name="useCurrentConnection" value="false" />
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+  <configuration default="false" name="[CLI] Create Example" type="JetRunConfigurationType">
+    <option name="MAIN_CLASS_NAME" value="ru.anokhin.jaxws.CliMainKt" />
+    <module name="web-services-technologies-anokhin.jax-ws-service.bundles.cli.main" />
     <option name="PROGRAM_PARAMETERS" value="create --name Anokhin --author Parent1 --author Parent2 --publisher &quot;Human Entertaiment&quot; --publication-date 19-02-1999 --page-count 22" />
     <shortenClasspath name="NONE" />
     <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">

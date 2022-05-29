@@ -3,7 +3,7 @@ package ru.anokhin.jaxws.service
 import jakarta.jws.WebMethod
 import jakarta.jws.WebParam
 import java.util.Date
-import ru.anokhin.jaxws.exception.ServiceException
+import ru.anokhin.core.exception.ServiceException
 import ru.anokhin.jaxws.model.dto.BookSoapDto
 
 interface BookSoapService {

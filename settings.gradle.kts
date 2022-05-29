@@ -3,9 +3,13 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "web-services-technologies-anokhin"
 
 include(":jax-ws-service")
-include(":jax-ws-service:cli")
 include(":jax-ws-service:client")
-include(":jax-ws-service:core")
-include(":jax-ws-service:j2ee")
 include(":jax-ws-service:model")
-include(":jax-ws-service:standalone")
+include(":jax-ws-service:model-impl")
+
+include(":jax-ws-service:bundles:cli")
+include(":jax-ws-service:bundles:j2ee")
+include(":jax-ws-service:bundles:standalone")
+
+include(":service-core:core")
+include(":service-core:core-model")
