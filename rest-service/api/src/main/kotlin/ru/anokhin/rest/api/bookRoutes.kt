@@ -15,6 +15,7 @@ import io.ktor.server.routing.route
 import io.ktor.util.pipeline.PipelineContext
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toKotlinLocalDate
+import ru.anokhin.core.ErrorCodes
 import ru.anokhin.core.exception.ServiceException
 import ru.anokhin.core.model.dto.BookSaveDto
 import ru.anokhin.core.service.BookService
@@ -23,6 +24,8 @@ import ru.anokhin.rest.api.model.Book
 import ru.anokhin.rest.api.model.BookCreationRequest
 import ru.anokhin.rest.api.model.BookFilter
 import ru.anokhin.rest.api.model.BookUpdateRequest
+import ru.anokhin.rest.api.model.ErrorModel
+import ru.anokhin.rest.api.model.ErrorResponse
 
 private typealias ApiBookFilter = BookFilter
 private typealias ModelBookFilter = ru.anokhin.core.model.dto.BookFilter
@@ -154,5 +157,19 @@ private suspend inline fun <T> PipelineContext<Unit, ApplicationCall>.callServic
     call.respond(
         HttpStatusCode.BadRequest,
         errorResponse
+    )
+} catch (ex: Exception) {
+    call.respond(
+        ErrorResponse(
+            ErrorModel(
+                code = ErrorCodes.Books001UnknownError.code,
+                message = buildString {
+                    append(ex.javaClass.canonicalName)
+                    if (ex.message != null) {
+                        append(": ", ex.message)
+                    }
+                }
+            )
+        )
     )
 }

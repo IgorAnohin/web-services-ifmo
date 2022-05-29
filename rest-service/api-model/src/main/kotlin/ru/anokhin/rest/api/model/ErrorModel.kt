@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Error(
+data class ErrorModel(
 
     /**
      * One of a server-defined set of error codes.
@@ -24,7 +24,7 @@ data class Error(
     /**
      * An array of details about specific errors that led to this reported error.
      */
-    val details: List<Error> = emptyList(),
+    val details: List<ErrorModel> = emptyList(),
 
     /**
      * An object containing more specific information than the current object about the error.

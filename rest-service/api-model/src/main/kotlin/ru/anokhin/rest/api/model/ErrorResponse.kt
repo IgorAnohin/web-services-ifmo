@@ -61,5 +61,5 @@ data class ErrorResponse(
     /**
      * The error object.
      */
-    val error: Error,
+    val error: ErrorModel,
 )
