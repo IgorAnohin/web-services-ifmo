@@ -1,12 +1,16 @@
 [versions]
 hibernate = "6.0.0.Final"
 jersey = "3.0.4"
+jetty = "11.0.9"
 jakarta-xml = "4.0.0"
 
+ktor = "2.0.1"
 clikt = "3.4.2"
 mordant = "2.0.0-beta5"
 kotlinLogging = "2.1.21"
+log4j = "2.17.2"
 kotlinx-serialization = "1.3.2"
+kotlinx-datetime = "0.3.3"
 kotlin = "1.6.21"
 java = "17"
 
@@ -14,9 +18,8 @@ java = "17"
 hibernate-core = { module = "org.hibernate.orm:hibernate-core", version.ref = "hibernate" } # https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
 hibernate-commons-annotations = { module = "org.hibernate.common:hibernate-commons-annotations", version.ref = "hibernate" } # https://mvnrepository.com/artifact/org.hibernate.common/hibernate-commons-annotations
 
-jersey-client = { module = "org.glassfish.jersey.core:jersey-client", version.ref = "jersey" } # https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client
-jersey-server = { module = "org.glassfish.jersey.core:jersey-server", version.ref = "jersey" } # https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-server
-jersey-common = { module = "org.glassfish.jersey.core:jersey-common", version.ref = "jersey" } # https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-common
+jersey-core-client = { module = "org.glassfish.jersey.core:jersey-client", version.ref = "jersey" } # https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-client
+jersey-core-server = { module = "org.glassfish.jersey.core:jersey-server", version.ref = "jersey" } # https://mvnrepository.com/artifact/org.glassfish.jersey.core/jersey-server
 
 jakarta-xml-bindApi = { module = "jakarta.xml.bind:jakarta.xml.bind-api", version.ref = "jakarta-xml" } # https://mvnrepository.com/artifact/jakarta.xml.bind/jakarta.xml.bind-api
 jakarta-xml-wsApi = { module = "jakarta.xml.ws:jakarta.xml.ws-api", version.ref = "jakarta-xml" } # https://mvnrepository.com/artifact/jakarta.xml.ws/jakarta.xml.ws-api
@@ -28,6 +31,19 @@ jakarta-injectApi = { module = "jakarta.inject:jakarta.inject-api", version = "2
 
 sun-xml-jaxwsRt = { module = "com.sun.xml.ws:jaxws-rt", version = "3.0.2" } # https://mvnrepository.com/artifact/com.sun.xml.ws/jaxws-rt
 
+ktor-server-contentNegotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" } # https://mvnrepository.com/artifact/io.ktor/ktor-server-content-negotiation
+ktor-server-defaultHeaders = { module = "io.ktor:ktor-server-default-headers", version.ref = "ktor" } # https://mvnrepository.com/artifact/io.ktor/ktor-server-default-headers
+ktor-server-callLogging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktor" } # https://mvnrepository.com/artifact/io.ktor/ktor-server-call-logging
+ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" } # https://mvnrepository.com/artifact/io.ktor/ktor-server-netty
+ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" } # https://mvnrepository.com/artifact/io.ktor/ktor-server-core
+
+ktor-client-contentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" } # https://mvnrepository.com/artifact/io.ktor/ktor-client-content-negotiation
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" } # https://mvnrepository.com/artifact/io.ktor/ktor-client-logging
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" } # https://mvnrepository.com/artifact/io.ktor/ktor-client-core
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" } # https://mvnrepository.com/artifact/io.ktor/ktor-client-cio
+
+ktor-serialization-json-kotlinx = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" } # https://mvnrepository.com/artifact/io.ktor/ktor-serialization-kotlinx-json
+
 clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" } # https://mvnrepository.com/artifact/com.github.ajalt.clikt/clikt
 clikt-jvm = { module = "com.github.ajalt.clikt:clikt-jvm", version.ref = "clikt" } # https://mvnrepository.com/artifact/com.github.ajalt.clikt/clikt-jvm
 
@@ -36,23 +52,33 @@ mordant-jvm = { module = "com.github.ajalt.mordant:mordant-jvm", version.ref = "
 
 kotlinLogging-jvm = { module = "io.github.microutils:kotlin-logging-jvm", version.ref = "kotlinLogging" } # https://mvnrepository.com/artifact/io.github.microutils/kotlin-logging-jvm
 kotlinLogging = { module = "io.github.microutils:kotlin-logging", version.ref = "kotlinLogging" } # https://mvnrepository.com/artifact/io.github.microutils/kotlin-logging
+log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j" } # https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api
+log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" } # https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+log4j-slf4jImpl = { module = "org.apache.logging.log4j:log4j-slf4j-impl", version.ref = "log4j" } # https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
 
 kotlinx-serialization-jsonJvm = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm", version.ref = "kotlinx-serialization" } # https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-serialization-json-jvm
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" } # https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-serialization-json
 
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" } # https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-datetime
+
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" } # https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
 kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" } # https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib-jdk8
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" } # https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib
-kotlin-stdlib-common = { module = "org.jetbrains.kotlin:kotlin-stdlib-common", version.ref = "kotlin" } # https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib-common
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" } # https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-test
 
 jdbcDrivers-postgresql = { module = "org.postgresql:postgresql", version = "42.3.4" } # https://mvnrepository.com/artifact/org.postgresql/postgresql
 
 [bundles]
-kotlin = ["kotlin-stdlib", "kotlin-stdlib-jdk8"]
+kotlin = [
+    "kotlin-stdlib", "kotlin-stdlib-jdk8",
+    "kotlin-reflect"
+]
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" } # https://plugins.gradle.org/plugin/org.jetbrains.kotlin.jvm
-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" } # https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.serialization
 kotlin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" } # https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.jpa
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" } # https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.spring
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" } # https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.serialization
 kotlin-allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" } # https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.allopen
+kotlin-noarg = { id = "org.jetbrains.kotlin.plugin.noarg", version.ref = "kotlin" } # https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.noarg
 shadow = { id = "com.github.johnrengelman.shadow", version = "7.1.2" } # https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow

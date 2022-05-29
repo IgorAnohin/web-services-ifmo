@@ -26,7 +26,10 @@ subprojects {
             useJUnitPlatform()
         }
         withType<KotlinCompile>() {
-            kotlinOptions.jvmTarget = javaVersion
+            kotlinOptions {
+                jvmTarget = javaVersion
+                freeCompilerArgs = listOf("-Xjsr305=strict")
+            }
         }
     }
 

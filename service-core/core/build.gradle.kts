@@ -20,7 +20,11 @@ dependencies {
     api(libs.jakarta.injectApi)
 
     api(libs.kotlinLogging.jvm)
-    api(libs.kotlinx.serialization.jsonJvm)
+    api(libs.log4j.api)
+    implementation(libs.log4j.core)
+    implementation(libs.log4j.slf4jImpl)
+
+    api(libs.kotlinx.serialization.json)
     api(libs.bundles.kotlin)
 
     testImplementation(libs.kotlin.test)

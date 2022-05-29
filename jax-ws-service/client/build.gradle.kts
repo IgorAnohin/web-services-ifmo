@@ -1,7 +1,7 @@
 dependencies {
     api(projects.jaxWsService.apiModel)
 
-    implementation(libs.jersey.client)
+    implementation(libs.jersey.core.client)
 
     testImplementation(libs.kotlin.test)
 }

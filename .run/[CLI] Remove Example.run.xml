@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="[CLI] Remove Example" type="JetRunConfigurationType">
+  <configuration default="false" name="[JWS] CLI Remove Example" type="JetRunConfigurationType">
     <option name="MAIN_CLASS_NAME" value="ru.anokhin.jaxws.CliMainKt" />
     <module name="web-services-technologies-anokhin.jax-ws-service.bundles.cli.main" />
     <option name="PROGRAM_PARAMETERS" value="remove --id 1" />

@@ -1,7 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="[JWS] Standalone Web Service" type="JetRunConfigurationType">
-    <option name="MAIN_CLASS_NAME" value="ru.anokhin.jaxws.StandaloneMainKt" />
-    <module name="web-services-technologies-anokhin.jax-ws-service.bundles.standalone.main" />
+  <configuration default="false" name="[REST] CLI Remove Example" type="JetRunConfigurationType">
+    <option name="MAIN_CLASS_NAME" value="ru.anokhin.rest.CliMainKt" />
+    <module name="web-services-technologies-anokhin.rest-service.bundles.cli.main" />
+    <option name="PROGRAM_PARAMETERS" value="remove --id 1" />
     <shortenClasspath name="NONE" />
     <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
       <option name="credential" />

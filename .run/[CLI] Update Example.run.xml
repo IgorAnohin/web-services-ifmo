@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="[CLI] Update Example" type="JetRunConfigurationType">
+  <configuration default="false" name="[JWS] CLI Update Example" type="JetRunConfigurationType">
     <option name="MAIN_CLASS_NAME" value="ru.anokhin.jaxws.CliMainKt" />
     <module name="web-services-technologies-anokhin.jax-ws-service.bundles.cli.main" />
     <option name="PROGRAM_PARAMETERS" value="update --id 1 --author Mother --author Father" />
