@@ -1,6 +1,5 @@
 plugins {
     war
-    id("org.gretty") version "3.0.6"
 }
 
 tasks.withType<War> {

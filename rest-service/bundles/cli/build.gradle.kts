@@ -11,9 +11,5 @@ dependencies {
     implementation(libs.clikt)
     implementation(libs.mordant)
 
-    implementation(libs.log4j.api)
-    implementation(libs.log4j.core)
-    implementation(libs.log4j.slf4jImpl)
-
     implementation(libs.kotlin.reflect)
 }
