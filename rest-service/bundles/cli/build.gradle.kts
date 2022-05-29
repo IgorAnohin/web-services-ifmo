@@ -14,4 +14,6 @@ dependencies {
     implementation(libs.log4j.api)
     implementation(libs.log4j.core)
     implementation(libs.log4j.slf4jImpl)
+
+    implementation(libs.kotlin.reflect)
 }

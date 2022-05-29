@@ -4,9 +4,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.int
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import kotlinx.datetime.toKotlinLocalDate
+import kotlinx.datetime.LocalDate
 import ru.anokhin.core.ErrorCodes
 import ru.anokhin.core.exception.ServiceException
 import ru.anokhin.rest.api.model.Book
@@ -25,18 +23,12 @@ class FindCommand constructor(
     private val publisher: String? by option(help = "Publisher")
 
     private val publicationDateFrom: LocalDate? by option(
-        help = "Publication date in format dd-mm-yyyy (e.g. \"27-05-1984\")"
-    ).convert {
-        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
-        LocalDate.parse(it, formatter)
-    }
+        help = "Publication date in format yyyy-mm-dd (e.g. \"1984-05-27\")"
+    ).convert { LocalDate.parse(it) }
 
     private val publicationDateTo: LocalDate? by option(
-        help = "Publication date in format dd-mm-yyyy (e.g. \"25-04-2022\")"
-    ).convert {
-        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
-        LocalDate.parse(it, formatter)
-    }
+        help = "Publication date in format yyyy-mm-dd (e.g. \"2022-04-25\")"
+    ).convert { LocalDate.parse(it) }
 
     private val pageCountFrom: Int? by option(help = "Pages count").int()
 
@@ -49,8 +41,8 @@ class FindCommand constructor(
                     name = name,
                     author = author,
                     publisher = publisher,
-                    publicationDateFrom = publicationDateFrom?.toKotlinLocalDate(),
-                    publicationDateTo = publicationDateTo?.toKotlinLocalDate(),
+                    publicationDateFrom = publicationDateFrom,
+                    publicationDateTo = publicationDateTo,
                     pageCountFrom = pageCountFrom,
                     pageCountTo = pageCountTo,
                 )

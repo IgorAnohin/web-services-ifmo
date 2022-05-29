@@ -6,9 +6,7 @@ import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.int
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import kotlinx.datetime.toKotlinLocalDate
+import kotlinx.datetime.LocalDate
 import ru.anokhin.core.ErrorCodes
 import ru.anokhin.core.exception.ServiceException
 import ru.anokhin.rest.api.model.BookCreationRequest
@@ -29,11 +27,8 @@ class CreateCommand constructor(
 
     private val publisher: String by option(help = "Publisher").required()
 
-    private val publicationDate: LocalDate by option(help = "Publication date in format dd-mm-yyyy (e.g. \"27-05-1984\")")
-        .convert {
-            val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
-            LocalDate.parse(it, formatter)
-        }
+    private val publicationDate: LocalDate by option(help = "Publication date in format dd-mm-yyyy (e.g. \"1984-05-27\")")
+        .convert { LocalDate.parse(it) }
         .required()
 
     private val pageCount: Int by option(help = "Pages count").int().required()
@@ -45,7 +40,7 @@ class CreateCommand constructor(
                     name = name,
                     authors = authors,
                     publisher = publisher,
-                    publicationDate = publicationDate.toKotlinLocalDate(),
+                    publicationDate = publicationDate,
                     pageCount = pageCount
                 )
             ).also { book -> println("Created book: $book") }

@@ -7,9 +7,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.clikt.parameters.types.long
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import kotlinx.datetime.toKotlinLocalDate
+import kotlinx.datetime.LocalDate
 import ru.anokhin.core.ErrorCodes
 import ru.anokhin.core.exception.ServiceException
 import ru.anokhin.rest.api.model.Book
@@ -33,11 +31,9 @@ class UpdateCommand constructor(
 
     private val publisher: String? by option(help = "Publisher")
 
-    private val publicationDate: LocalDate? by option(help = "Publication date in format dd-mm-yyyy (e.g. \"27-05-1984\")")
-        .convert {
-            val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
-            LocalDate.parse(it, formatter)
-        }
+    private val publicationDate: LocalDate? by option(
+        help = "Publication date in format yyyy-mm-dd (e.g. \"1984-05-27\")"
+    ).convert { LocalDate.parse(it) }
 
     private val pageCount: Int? by option(help = "Pages count").int()
 
@@ -57,11 +53,9 @@ class UpdateCommand constructor(
                 bookId = id,
                 BookUpdateRequest(
                     name = this@UpdateCommand.name ?: existingBook.name,
-                    authors = this@UpdateCommand.authors.takeIf(List<*>::isNotEmpty)
-                        ?: existingBook.authors,
+                    authors = this@UpdateCommand.authors.takeIf(List<*>::isNotEmpty) ?: existingBook.authors,
                     publisher = this@UpdateCommand.publisher ?: existingBook.publisher,
-                    publicationDate = this@UpdateCommand.publicationDate?.toKotlinLocalDate()
-                        ?: existingBook.publicationDate,
+                    publicationDate = this@UpdateCommand.publicationDate ?: existingBook.publicationDate,
                     pageCount = this@UpdateCommand.pageCount ?: existingBook.pageCount
                 )
             )
