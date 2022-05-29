@@ -2,10 +2,15 @@ package ru.anokhin.jaxws.service.impl
 
 import jakarta.inject.Inject
 import jakarta.jws.WebService
+import jakarta.xml.soap.SOAPFactory
+import jakarta.xml.soap.SOAPFault
+import jakarta.xml.ws.soap.SOAPFaultException
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.Date
+import javax.xml.namespace.QName
+import ru.anokhin.core.exception.ServiceException
 import ru.anokhin.core.model.dto.BookDto
 import ru.anokhin.core.model.dto.BookFilter
 import ru.anokhin.core.model.dto.BookSaveDto
@@ -24,18 +29,22 @@ class BookSoapServiceImpl @Inject constructor(
         publisher: String,
         publicationDate: Date,
         pageCount: Int,
-    ): BookSoapDto = bookService.save(
-        BookSaveDto(
-            id = null,
-            name = name,
-            authors = authors,
-            publisher = publisher,
-            publicationDate = toLocalDate(publicationDate),
-            pageCount = pageCount
-        )
-    ).let(::toBookSoapDto)
+    ): BookSoapDto = interceptServiceException {
+        bookService.save(
+            BookSaveDto(
+                id = null,
+                name = name,
+                authors = authors,
+                publisher = publisher,
+                publicationDate = toLocalDate(publicationDate),
+                pageCount = pageCount
+            )
+        ).let(::toBookSoapDto)
+    }
 
-    override fun findById(id: Long): BookSoapDto = bookService.findById(id).let(::toBookSoapDto)
+    override fun findById(id: Long): BookSoapDto = interceptServiceException {
+        bookService.findById(id).let(::toBookSoapDto)
+    }
 
     override fun findByFilter(
         name: String?,
@@ -45,17 +54,19 @@ class BookSoapServiceImpl @Inject constructor(
         publicationDateTo: Date?,
         pageCountFrom: Int?,
         pageCountTo: Int?,
-    ): List<BookSoapDto> = bookService.findByFilter(
-        BookFilter(
-            name = name,
-            author = author,
-            publisher = publisher,
-            publicationDateFrom = publicationDateFrom?.let(::toLocalDate),
-            publicationDateTo = publicationDateTo?.let(::toLocalDate),
-            pageCountFrom = pageCountFrom,
-            pageCountTo = pageCountTo
-        )
-    ).map(::toBookSoapDto)
+    ): List<BookSoapDto> = interceptServiceException {
+        bookService.findByFilter(
+            BookFilter(
+                name = name,
+                author = author,
+                publisher = publisher,
+                publicationDateFrom = publicationDateFrom?.let(::toLocalDate),
+                publicationDateTo = publicationDateTo?.let(::toLocalDate),
+                pageCountFrom = pageCountFrom,
+                pageCountTo = pageCountTo
+            )
+        ).map(::toBookSoapDto)
+    }
 
     override fun update(
         id: Long,
@@ -64,18 +75,22 @@ class BookSoapServiceImpl @Inject constructor(
         publisher: String,
         publicationDate: Date,
         pageCount: Int,
-    ): BookSoapDto = bookService.save(
-        BookSaveDto(
-            id = id,
-            name = name,
-            authors = authors,
-            publisher = publisher,
-            publicationDate = toLocalDate(publicationDate),
-            pageCount = pageCount
-        )
-    ).let(::toBookSoapDto)
+    ): BookSoapDto = interceptServiceException {
+        bookService.save(
+            BookSaveDto(
+                id = id,
+                name = name,
+                authors = authors,
+                publisher = publisher,
+                publicationDate = toLocalDate(publicationDate),
+                pageCount = pageCount
+            )
+        ).let(::toBookSoapDto)
+    }
 
-    override fun deleteById(id: Long): Boolean = bookService.remove(id)
+    override fun deleteById(id: Long): Boolean = interceptServiceException {
+        bookService.remove(id)
+    }
 
     private fun toBookSoapDto(entity: BookDto): BookSoapDto = BookSoapDto().apply {
         this.id = entity.id
@@ -89,4 +104,16 @@ class BookSoapServiceImpl @Inject constructor(
     private fun toLocalDate(date: Date): LocalDate = LocalDateTime
         .ofInstant(date.toInstant(), ZoneOffset.UTC)
         .toLocalDate()
+
+    private fun <T> interceptServiceException(fn: () -> T): T =
+        try {
+            fn()
+        } catch (ex: ServiceException) {
+            val soapFactory: SOAPFactory = SOAPFactory.newInstance()
+            val soapFault: SOAPFault = soapFactory.createFault(
+                ServiceException::class.qualifiedName + "::" + ex.code.code,
+                QName("http://schemas.xmlsoap.org/soap/envelope/", "Client")
+            )
+            throw SOAPFaultException(soapFault)
+        }
 }
