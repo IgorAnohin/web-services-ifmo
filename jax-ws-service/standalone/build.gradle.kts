@@ -10,7 +10,5 @@ dependencies {
 
     implementation(projects.jaxWsService.core)
 
-//    implementation("com.sun.xml.ws:webservices-rt:2.0.1")
-    implementation(libs.sun.xml.jaxbImpl)
     implementation(libs.jakarta.xml.wsApi)
 }

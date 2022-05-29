@@ -26,7 +26,6 @@ jakarta-annotationApi = { module = "jakarta.annotation:jakarta.annotation-api", 
 jakarta-persistenceApi = { module = "jakarta.persistence:jakarta.persistence-api", version = "3.1.0" } # https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api
 
 sun-xml-jaxwsRt = { module = "com.sun.xml.ws:jaxws-rt", version = "3.0.2" } # https://mvnrepository.com/artifact/com.sun.xml.ws/jaxws-rt
-sun-xml-jaxbImpl = { module = "com.sun.xml.bind:jaxb-impl", version = "3.0.2" } # https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-impl
 
 clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" } # https://mvnrepository.com/artifact/com.github.ajalt.clikt/clikt
 clikt-jvm = { module = "com.github.ajalt.clikt:clikt-jvm", version.ref = "clikt" } # https://mvnrepository.com/artifact/com.github.ajalt.clikt/clikt-jvm
