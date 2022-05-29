@@ -16,6 +16,11 @@ interface BookSoapService {
         @WebParam(name = "pageCount") pageCount: Int,
     ): BookSoapDto
 
+    @WebMethod(operationName = "findById")
+    fun findById(
+        @WebParam(name = "id") id: Long,
+    ): BookSoapDto
+
     @WebMethod(operationName = "findByFilter")
     fun findByFilter(
         @WebParam(name = "name") name: String? = null,

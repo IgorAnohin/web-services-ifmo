@@ -85,6 +85,21 @@ public interface BookService {
 
     /**
      * 
+     * @param arg0
+     * @return
+     *     returns ru.anokhin.jaxws.client.BookSoapDto
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "findById", targetNamespace = "http://impl.service.jaxws.anokhin.ru/", className = "ru.anokhin.jaxws.client.FindById")
+    @ResponseWrapper(localName = "findByIdResponse", targetNamespace = "http://impl.service.jaxws.anokhin.ru/", className = "ru.anokhin.jaxws.client.FindByIdResponse")
+    @Action(input = "http://impl.service.jaxws.anokhin.ru/BookService/findByIdRequest", output = "http://impl.service.jaxws.anokhin.ru/BookService/findByIdResponse")
+    public BookSoapDto findById(
+        @WebParam(name = "arg0", targetNamespace = "")
+        long arg0);
+
+    /**
+     * 
      * @param arg3
      * @param arg2
      * @param arg5

@@ -26,6 +26,8 @@ public class ObjectFactory {
 
     private final static QName _BookSoapDto_QNAME = new QName("http://impl.service.jaxws.anokhin.ru/", "bookSoapDto");
     private final static QName _DeleteBookById_QNAME = new QName("http://impl.service.jaxws.anokhin.ru/", "deleteBookById");
+    private final static QName _FindById_QNAME = new QName("http://impl.service.jaxws.anokhin.ru/", "findById");
+    private final static QName _FindByIdResponse_QNAME = new QName("http://impl.service.jaxws.anokhin.ru/", "findByIdResponse");
     private final static QName _DeleteBookByIdResponse_QNAME = new QName("http://impl.service.jaxws.anokhin.ru/", "deleteBookByIdResponse");
     private final static QName _FindByFilter_QNAME = new QName("http://impl.service.jaxws.anokhin.ru/", "findByFilter");
     private final static QName _FindByFilterResponse_QNAME = new QName("http://impl.service.jaxws.anokhin.ru/", "findByFilterResponse");
@@ -71,6 +73,22 @@ public class ObjectFactory {
      */
     public FindByFilter createFindByFilter() {
         return new FindByFilter();
+    }
+
+    /**
+     * Create an instance of {@link FindById }
+     * 
+     */
+    public FindById createFindById() {
+        return new FindById();
+    }
+
+    /**
+     * Create an instance of {@link FindByIdResponse }
+     * 
+     */
+    public FindByIdResponse createFindByIdResponse() {
+        return new FindByIdResponse();
     }
 
     /**
@@ -129,6 +147,24 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://impl.service.jaxws.anokhin.ru/", name = "deleteBookById")
     public JAXBElement<DeleteBookById> createDeleteBookById(DeleteBookById value) {
         return new JAXBElement<DeleteBookById>(_DeleteBookById_QNAME, DeleteBookById.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link FindById }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://impl.service.jaxws.anokhin.ru/", name = "findById")
+    public JAXBElement<FindById> createFindById(FindById value) {
+        return new JAXBElement<FindById>(_FindById_QNAME, FindById.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link FindByIdResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://impl.service.jaxws.anokhin.ru/", name = "findByIdResponse")
+    public JAXBElement<FindByIdResponse> createFindByIdResponse(FindByIdResponse value) {
+        return new JAXBElement<FindByIdResponse>(_FindByIdResponse_QNAME, FindByIdResponse.class, null, value);
     }
 
     /**

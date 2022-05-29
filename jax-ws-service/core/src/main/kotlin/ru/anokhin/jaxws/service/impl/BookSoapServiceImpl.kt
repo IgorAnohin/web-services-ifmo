@@ -36,6 +36,8 @@ class BookSoapServiceImpl : BookSoapService {
         )
     ).let(::toBookSoapDto)
 
+    override fun findById(id: Long): BookSoapDto = bookService.findById(id).let(::toBookSoapDto)
+
     override fun findByFilter(
         name: String?,
         author: String?,

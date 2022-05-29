@@ -43,6 +43,13 @@ class BookServiceImpl : BookService {
             }
     }
 
+    override fun findById(id: Long): BookDto {
+        logger.entry(id)
+        return bookDao.findById(id)
+            .let(::toBookDto)
+            .also(logger::exit)
+    }
+
     override fun findByFilter(filter: BookFilter): List<BookDto> {
         logger.entry(filter)
         val params = toParamsMap(filter)
