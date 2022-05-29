@@ -1,3 +1,7 @@
+# Book Service
+
+## Initializing environment
+
 Install PostgreSQL using Docker
 
 ```shell
@@ -70,6 +74,10 @@ mvn package
 cd -
 ```
 
+---
+
+## Deploying services
+
 Deploy JAX WS service
 
 ```shell
@@ -99,4 +107,82 @@ asadmin undeploy ${WAR_FILENAME%.*} 2> /dev/null >&2 || true
 asadmin deploy \
     --contextroot '/rest' \
     rest-service/bundles/j2ee/build/libs/${WAR_FILENAME}
+```
+
+---
+
+## Install CLIs
+
+Install JAX WS CLI
+```shell
+VERSION=$(awk -F= '$1=="version"{print $2}' gradle.properties)
+ARCHIVE_ID="cli-$VERSION"
+JAXWS_INSTALL_DIR=$(mktemp -d)
+TEMP_DIR=$(mktemp -d)
+
+./gradlew build
+unzip -q "jax-ws-service/bundles/cli/build/distributions/$ARCHIVE_ID.zip" -d "$TEMP_DIR"
+rsync --remove-source-files -r "$TEMP_DIR"/"$ARCHIVE_ID"/* "$JAXWS_INSTALL_DIR"
+
+alias jaxws_cli="$JAXWS_INSTALL_DIR/bin/cli"
+```
+
+Install REST CLI
+```shell
+VERSION=$(awk -F= '$1=="version"{print $2}' gradle.properties)
+ARCHIVE_ID="cli-$VERSION"
+REST_INSTALL_DIR=$(mktemp -d)
+TEMP_DIR=$(mktemp -d)
+
+./gradlew build
+unzip -q "rest-service/bundles/cli/build/distributions/$ARCHIVE_ID.zip" -d "$TEMP_DIR"
+rsync --remove-source-files -r "$TEMP_DIR"/"$ARCHIVE_ID"/* "$REST_INSTALL_DIR"
+
+alias rest_cli="$REST_INSTALL_DIR/bin/cli"
+```
+
+## Use CLIs
+
+Use JAX WS CLI
+```shell
+# Create book
+jaxws_cli create \
+    --name 'Волновые процессы. Основные законы' \
+    --author 'И.Е.Иродов' \
+    --publisher 'Лаборатория знаний' \
+    --publication-date 2014-05-08 \
+    --page-count 266
+
+# Find book
+jaxws_cli find --publisher 'Лаборатория знаний'
+
+# Update book
+jaxws_cli update \
+    --id 1 \
+    --page-count 265
+    
+# Remove book
+jaxws_cli remove --id 1
+```
+
+Use REST CLI
+```shell
+# Create book
+rest_cli create \
+    --name 'Волновые процессы. Основные законы' \
+    --author 'И.Е.Иродов' \
+    --publisher 'Лаборатория знаний' \
+    --publication-date 2014-05-08 \
+    --page-count 266
+
+# Find book
+rest_cli find --publisher 'Лаборатория знаний'
+
+# Update book
+rest_cli update \
+    --id 1 \
+    --page-count 265
+    
+# Remove book
+rest_cli remove --id 1
 ```
