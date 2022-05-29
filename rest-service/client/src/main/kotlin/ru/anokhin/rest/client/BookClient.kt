@@ -4,7 +4,6 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.Charsets
-import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.HttpResponseValidator
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
@@ -21,6 +20,7 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
+import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
@@ -30,6 +30,12 @@ import ru.anokhin.rest.api.model.BookCreationRequest
 import ru.anokhin.rest.api.model.BookFilter
 import ru.anokhin.rest.api.model.BookUpdateRequest
 import ru.anokhin.rest.api.model.ErrorResponse
+
+private fun isValidatedStatusCode(status: HttpStatusCode): Boolean = when {
+    status.isSuccess() -> false
+    (status == HttpStatusCode.NotFound) -> false
+    else -> true
+}
 
 private fun HttpResponse.hasServiceException(): Boolean {
     if (status == HttpStatusCode.BadRequest) return true
@@ -54,16 +60,15 @@ class BookClient {
             )
         }
 
-        expectSuccess = true
         HttpResponseValidator {
-            handleResponseExceptionWithRequest { exception, request ->
-                val clientException = exception as? ClientRequestException ?: return@handleResponseExceptionWithRequest
-                val response: HttpResponse = clientException.response
+            validateResponse block@{ response ->
+                if (!isValidatedStatusCode(response.status)) {
+                    return@block
+                }
+
                 if (response.hasServiceException()) {
                     val errorResponse: ErrorResponse = response.body()
                     throw errorResponse.asServiceException()
-                } else {
-                    throw clientException
                 }
             }
         }
@@ -92,10 +97,15 @@ class BookClient {
     }
 
     fun findByFilter(filter: BookFilter): List<Book> = runBlocking {
-        client.post("/find-by-filter") {
+        val response = client.post("/find-by-filter") {
             contentType(ContentType.Application.Json)
             setBody(filter)
-        }.body()
+        }
+        if (response.status == HttpStatusCode.NotFound) {
+            emptyList()
+        } else {
+            response.body()
+        }
     }
 
     fun findById(id: Long): Book = runBlocking {
