@@ -3,7 +3,7 @@ hibernate = "6.0.0.Final"
 jersey = "3.0.4"
 jakarta-xml = "4.0.0"
 
-clikt = "3.4.1"
+clikt = "3.4.2"
 mordant = "2.0.0-beta5"
 kotlinLogging = "2.1.21"
 kotlinx-serialization = "1.3.2"
