@@ -12,11 +12,10 @@ import ru.anokhin.jaxws.model.dto.BookSoapDto
 import ru.anokhin.jaxws.service.BookService
 import ru.anokhin.jaxws.service.BookSoapService
 
-@WebService(name = "BookService")
-class BookSoapServiceImpl constructor(
+@WebService(name = "BookService", serviceName = "BookService")
+class BookSoapServiceImpl : BookSoapService {
 
-    private val bookService: BookService,
-) : BookSoapService {
+    lateinit var bookService: BookService
 
     override fun create(
         name: String,

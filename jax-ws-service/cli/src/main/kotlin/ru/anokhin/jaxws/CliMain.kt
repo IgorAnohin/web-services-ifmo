@@ -4,15 +4,11 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.NoOpCliktCommand
 import com.github.ajalt.clikt.core.context
 import com.github.ajalt.clikt.core.subcommands
-import com.github.ajalt.clikt.output.CliktHelpFormatter
-import com.github.ajalt.clikt.output.HelpFormatter
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.int
-import com.github.ajalt.mordant.terminal.Terminal
-import com.github.ajalt.mordant.terminal.TerminalColors
 import java.net.URL
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -20,26 +16,42 @@ import java.time.format.DateTimeFormatter
 import java.util.GregorianCalendar
 import javax.xml.datatype.DatatypeFactory
 import ru.anokhin.jaxws.client.BookService
-import ru.anokhin.jaxws.client.BookSoapDto
-import ru.anokhin.jaxws.client.BookSoapServiceImplService
+import ru.anokhin.jaxws.client.BookService_Service
 
-fun main(args: Array<String>) {
-    val url = URL("http://localhost:8080/BookService?wsdl")
-    val bookService = BookSoapServiceImplService(url)
-    val bookSoapService: BookService = bookService.bookServicePort
+private const val WSDL_URL_ENV_VARIABLE: String = "WSDL_URL"
 
-    BooksCli()
-        .subcommands(Create(bookSoapService))
-        .main(args)
-}
-
-private fun stringify(value: BookSoapDto) = value.run {
-    "Book(id=$id, name=$name, authors=$authors, publisher=$publisher, publicationDate=$publicationDate, pageCount=$pageCount)"
-}
+/**
+ * Link to standalone WSDL URL
+ */
+private const val STANDALONE_WSDL_URL: String = "http://localhost:8080/jaxws/BookService?wsdl"
 
 private val DATATYPE_FACTORY: DatatypeFactory = DatatypeFactory.newInstance()
 
-class Create constructor(
+private fun resolveWsdlUrl(): URL =
+    System.getenv()
+        .getOrDefault(key = WSDL_URL_ENV_VARIABLE, defaultValue = STANDALONE_WSDL_URL)
+        .let(::URL)
+
+fun main(args: Array<String>) {
+    val bookService = BookService_Service(resolveWsdlUrl())
+    val bookSoapService: BookService = bookService.bookServicePort
+
+    BooksCli()
+        .subcommands(CreateCommand(bookSoapService))
+        .main(args)
+}
+
+class BooksCli : NoOpCliktCommand(
+    name = "cli",
+    help = "An example of a custom help formatter that uses ansi colors"
+) {
+
+    init {
+        context { helpFormatter = ColorHelpFormatter() }
+    }
+}
+
+class CreateCommand constructor(
     private val bookSoapService: BookService,
 ) : CliktCommand(name = "create", help = "Create a new book") {
 
@@ -64,39 +76,7 @@ class Create constructor(
                 .toInstant(ZoneOffset.UTC).toEpochMilli()
         }.let(DATATYPE_FACTORY::newXMLGregorianCalendar)
 
-        bookSoapService.create(
-            name,
-            authors,
-            publisher,
-            publicationDateVal,
-            pageCount
-        ).also { println("Created book: ${stringify(it)}") }
+        bookSoapService.create(name, authors, publisher, publicationDateVal, pageCount)
+            .also { book -> println("Created book: ${book.stringify()}") }
     }
-}
-
-class BooksCli : NoOpCliktCommand(
-    name = "cli",
-    help = "An example of a custom help formatter that uses ansi colors"
-) {
-
-    init {
-        context { helpFormatter = ColorHelpFormatter() }
-    }
-}
-
-class ColorHelpFormatter : CliktHelpFormatter() {
-
-    private val tc: TerminalColors = Terminal().colors
-
-    override fun renderTag(tag: String, value: String) = tc.green(super.renderTag(tag, value))
-
-    override fun renderOptionName(name: String) = tc.yellow(super.renderOptionName(name))
-
-    override fun renderArgumentName(name: String) = tc.yellow(super.renderArgumentName(name))
-
-    override fun renderSubcommandName(name: String) = tc.yellow(super.renderSubcommandName(name))
-
-    override fun renderSectionTitle(title: String) = (tc.bold + tc.underline)(super.renderSectionTitle(title))
-
-    override fun optionMetavar(option: HelpFormatter.ParameterHelp.Option) = tc.green(super.optionMetavar(option))
 }

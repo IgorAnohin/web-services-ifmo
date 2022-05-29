@@ -26,9 +26,11 @@ fun main(args: Array<String>) {
 
     val bookDao: BookDao = BookDaoImpl(entityManager)
     val bookService: BookService = BookServiceImpl(bookDao)
-    val bookSoapService: BookSoapService = BookSoapServiceImpl(bookService)
+    val bookSoapService: BookSoapService = BookSoapServiceImpl().apply {
+        this.bookService = bookService
+    }
 
-    val readServiceUrl = "http://127.0.0.1:8080/BookService"
+    val readServiceUrl = "http://127.0.0.1:8080/jaxws/BookService"
     Endpoint.publish(readServiceUrl, bookSoapService)
     logger.info { "Server started!" }
 }
