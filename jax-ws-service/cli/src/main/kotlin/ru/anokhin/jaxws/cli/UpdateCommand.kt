@@ -10,11 +10,12 @@ import com.github.ajalt.clikt.parameters.types.long
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import ru.anokhin.jaxws.cli.util.stringify
-import ru.anokhin.jaxws.client.BookService
-import ru.anokhin.jaxws.client.BookSoapDto
+import ru.anokhin.jaxws.cli.util.toDate
+import ru.anokhin.jaxws.model.dto.BookSoapDto
+import ru.anokhin.jaxws.service.BookSoapService
 
 class UpdateCommand constructor(
-    private val bookSoapService: BookService,
+    private val bookSoapService: BookSoapService,
 ) : CliktCommand(name = "update", help = "Update an existing book") {
 
     private val id: Long by option(help = "Book identifier").long().required()
@@ -38,16 +39,15 @@ class UpdateCommand constructor(
 
     override fun run() {
         val existingBook: BookSoapDto = bookSoapService.findById(id)
-
         val updatedBook: BookSoapDto = bookSoapService.update(
-            id,
-            this@UpdateCommand.name ?: existingBook.name,
-            this@UpdateCommand.authors.takeIf(List<*>::isNotEmpty) ?: existingBook.authors,
-            this@UpdateCommand.publisher ?: existingBook.publisher,
-            this@UpdateCommand.publicationDate?.toGregorianCalendar() ?: existingBook.publicationDate,
-            this@UpdateCommand.pageCount ?: existingBook.pageCount
+            id = id,
+            name = this@UpdateCommand.name ?: existingBook.name!!,
+            authors = this@UpdateCommand.authors.takeIf(List<*>::isNotEmpty) ?: existingBook.authors,
+            publisher = this@UpdateCommand.publisher ?: existingBook.publisher!!,
+            publicationDate = this@UpdateCommand.publicationDate?.toDate()
+                ?: existingBook.publicationDate?.toDate()!!,
+            pageCount = this@UpdateCommand.pageCount ?: existingBook.pageCount!!
         )
-
         println("Updated book by id $id: ${updatedBook.stringify()}")
     }
 }

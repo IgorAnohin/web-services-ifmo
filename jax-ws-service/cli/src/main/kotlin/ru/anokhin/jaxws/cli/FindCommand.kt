@@ -7,11 +7,12 @@ import com.github.ajalt.clikt.parameters.types.int
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import ru.anokhin.jaxws.cli.util.stringify
-import ru.anokhin.jaxws.client.BookService
-import ru.anokhin.jaxws.client.BookSoapDto
+import ru.anokhin.jaxws.cli.util.toDate
+import ru.anokhin.jaxws.model.dto.BookSoapDto
+import ru.anokhin.jaxws.service.BookSoapService
 
 class FindCommand constructor(
-    private val bookSoapService: BookService,
+    private val bookSoapService: BookSoapService,
 ) : CliktCommand(name = "find", help = "Find books by filter") {
 
     private val name: String? by option(help = "Book name")
@@ -40,13 +41,13 @@ class FindCommand constructor(
 
     override fun run() {
         val foundBooks: List<BookSoapDto> = bookSoapService.findByFilter(
-            name,
-            author,
-            publisher,
-            publicationDateFrom?.toGregorianCalendar(),
-            publicationDateTo?.toGregorianCalendar(),
-            pageCountFrom,
-            pageCountTo,
+            name = name,
+            author = author,
+            publisher = publisher,
+            publicationDateFrom = publicationDateFrom?.toDate(),
+            publicationDateTo = publicationDateTo?.toDate(),
+            pageCountFrom = pageCountFrom,
+            pageCountTo = pageCountTo,
         )
         when {
             foundBooks.isEmpty() -> println("Could not find any book by given filter")

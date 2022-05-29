@@ -9,10 +9,11 @@ import com.github.ajalt.clikt.parameters.types.int
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import ru.anokhin.jaxws.cli.util.stringify
-import ru.anokhin.jaxws.client.BookService
+import ru.anokhin.jaxws.cli.util.toDate
+import ru.anokhin.jaxws.service.BookSoapService
 
 class CreateCommand constructor(
-    private val bookSoapService: BookService,
+    private val bookSoapService: BookSoapService,
 ) : CliktCommand(name = "create", help = "Create a new book") {
 
     private val name: String by option(help = "Book name").required()
@@ -34,7 +35,12 @@ class CreateCommand constructor(
     private val pageCount: Int by option(help = "Pages count").int().required()
 
     override fun run() {
-        bookSoapService.create(name, authors, publisher, publicationDate.toGregorianCalendar(), pageCount)
-            .also { book -> println("Created book: ${book.stringify()}") }
+        bookSoapService.create(
+            name = name,
+            authors = authors,
+            publisher = publisher,
+            publicationDate = publicationDate.toDate(),
+            pageCount = pageCount
+        ).also { book -> println("Created book: ${book.stringify()}") }
     }
 }

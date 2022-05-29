@@ -43,7 +43,7 @@ interface BookSoapService {
     ): BookSoapDto
 
     @WebMethod(operationName = "deleteById")
-    fun deleteBookById(
+    fun deleteById(
         @WebParam(name = "id") id: Long,
     ): Boolean
 }

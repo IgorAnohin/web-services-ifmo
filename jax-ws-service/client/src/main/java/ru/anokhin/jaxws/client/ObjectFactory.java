@@ -25,11 +25,11 @@ import javax.xml.namespace.QName;
 public class ObjectFactory {
 
     private final static QName _BookSoapDto_QNAME = new QName("http://impl.service.jaxws.anokhin.ru/", "bookSoapDto");
-    private final static QName _DeleteBookById_QNAME = new QName("http://impl.service.jaxws.anokhin.ru/", "deleteBookById");
+    private final static QName _DeleteByIdResponse_QNAME = new QName("http://impl.service.jaxws.anokhin.ru/", "deleteByIdResponse");
     private final static QName _FindById_QNAME = new QName("http://impl.service.jaxws.anokhin.ru/", "findById");
     private final static QName _FindByIdResponse_QNAME = new QName("http://impl.service.jaxws.anokhin.ru/", "findByIdResponse");
-    private final static QName _DeleteBookByIdResponse_QNAME = new QName("http://impl.service.jaxws.anokhin.ru/", "deleteBookByIdResponse");
     private final static QName _FindByFilter_QNAME = new QName("http://impl.service.jaxws.anokhin.ru/", "findByFilter");
+    private final static QName _DeleteById_QNAME = new QName("http://impl.service.jaxws.anokhin.ru/", "deleteById");
     private final static QName _FindByFilterResponse_QNAME = new QName("http://impl.service.jaxws.anokhin.ru/", "findByFilterResponse");
     private final static QName _Create_QNAME = new QName("http://impl.service.jaxws.anokhin.ru/", "create");
     private final static QName _CreateResponse_QNAME = new QName("http://impl.service.jaxws.anokhin.ru/", "createResponse");
@@ -44,11 +44,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DeleteBookById }
+     * Create an instance of {@link DeleteByIdResponse }
      * 
      */
-    public DeleteBookById createDeleteBookById() {
-        return new DeleteBookById();
+    public DeleteByIdResponse createDeleteByIdResponse() {
+        return new DeleteByIdResponse();
     }
 
     /**
@@ -57,14 +57,6 @@ public class ObjectFactory {
      */
     public BookSoapDto createBookSoapDto() {
         return new BookSoapDto();
-    }
-
-    /**
-     * Create an instance of {@link DeleteBookByIdResponse }
-     * 
-     */
-    public DeleteBookByIdResponse createDeleteBookByIdResponse() {
-        return new DeleteBookByIdResponse();
     }
 
     /**
@@ -89,6 +81,14 @@ public class ObjectFactory {
      */
     public FindByIdResponse createFindByIdResponse() {
         return new FindByIdResponse();
+    }
+
+    /**
+     * Create an instance of {@link DeleteById }
+     * 
+     */
+    public DeleteById createDeleteById() {
+        return new DeleteById();
     }
 
     /**
@@ -141,12 +141,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DeleteBookById }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link DeleteByIdResponse }{@code >}}
      * 
      */
-    @XmlElementDecl(namespace = "http://impl.service.jaxws.anokhin.ru/", name = "deleteBookById")
-    public JAXBElement<DeleteBookById> createDeleteBookById(DeleteBookById value) {
-        return new JAXBElement<DeleteBookById>(_DeleteBookById_QNAME, DeleteBookById.class, null, value);
+    @XmlElementDecl(namespace = "http://impl.service.jaxws.anokhin.ru/", name = "deleteByIdResponse")
+    public JAXBElement<DeleteByIdResponse> createDeleteByIdResponse(DeleteByIdResponse value) {
+        return new JAXBElement<DeleteByIdResponse>(_DeleteByIdResponse_QNAME, DeleteByIdResponse.class, null, value);
     }
 
     /**
@@ -168,21 +168,21 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DeleteBookByIdResponse }{@code >}}
-     * 
-     */
-    @XmlElementDecl(namespace = "http://impl.service.jaxws.anokhin.ru/", name = "deleteBookByIdResponse")
-    public JAXBElement<DeleteBookByIdResponse> createDeleteBookByIdResponse(DeleteBookByIdResponse value) {
-        return new JAXBElement<DeleteBookByIdResponse>(_DeleteBookByIdResponse_QNAME, DeleteBookByIdResponse.class, null, value);
-    }
-
-    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link FindByFilter }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "http://impl.service.jaxws.anokhin.ru/", name = "findByFilter")
     public JAXBElement<FindByFilter> createFindByFilter(FindByFilter value) {
         return new JAXBElement<FindByFilter>(_FindByFilter_QNAME, FindByFilter.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link DeleteById }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://impl.service.jaxws.anokhin.ru/", name = "deleteById")
+    public JAXBElement<DeleteById> createDeleteById(DeleteById value) {
+        return new JAXBElement<DeleteById>(_DeleteById_QNAME, DeleteById.class, null, value);
     }
 
     /**

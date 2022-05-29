@@ -76,7 +76,7 @@ class BookSoapServiceImpl : BookSoapService {
         )
     ).let(::toBookSoapDto)
 
-    override fun deleteBookById(id: Long): Boolean = bookService.remove(id)
+    override fun deleteById(id: Long): Boolean = bookService.remove(id)
 
     private fun toBookSoapDto(entity: BookDto): BookSoapDto = BookSoapDto().apply {
         this.id = entity.id

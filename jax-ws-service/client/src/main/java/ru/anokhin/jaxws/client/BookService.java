@@ -85,21 +85,6 @@ public interface BookService {
 
     /**
      * 
-     * @param arg0
-     * @return
-     *     returns ru.anokhin.jaxws.client.BookSoapDto
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "findById", targetNamespace = "http://impl.service.jaxws.anokhin.ru/", className = "ru.anokhin.jaxws.client.FindById")
-    @ResponseWrapper(localName = "findByIdResponse", targetNamespace = "http://impl.service.jaxws.anokhin.ru/", className = "ru.anokhin.jaxws.client.FindByIdResponse")
-    @Action(input = "http://impl.service.jaxws.anokhin.ru/BookService/findByIdRequest", output = "http://impl.service.jaxws.anokhin.ru/BookService/findByIdResponse")
-    public BookSoapDto findById(
-        @WebParam(name = "arg0", targetNamespace = "")
-        long arg0);
-
-    /**
-     * 
      * @param arg3
      * @param arg2
      * @param arg5
@@ -135,14 +120,29 @@ public interface BookService {
      * 
      * @param arg0
      * @return
+     *     returns ru.anokhin.jaxws.client.BookSoapDto
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "findById", targetNamespace = "http://impl.service.jaxws.anokhin.ru/", className = "ru.anokhin.jaxws.client.FindById")
+    @ResponseWrapper(localName = "findByIdResponse", targetNamespace = "http://impl.service.jaxws.anokhin.ru/", className = "ru.anokhin.jaxws.client.FindByIdResponse")
+    @Action(input = "http://impl.service.jaxws.anokhin.ru/BookService/findByIdRequest", output = "http://impl.service.jaxws.anokhin.ru/BookService/findByIdResponse")
+    public BookSoapDto findById(
+        @WebParam(name = "arg0", targetNamespace = "")
+        long arg0);
+
+    /**
+     * 
+     * @param arg0
+     * @return
      *     returns boolean
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "deleteBookById", targetNamespace = "http://impl.service.jaxws.anokhin.ru/", className = "ru.anokhin.jaxws.client.DeleteBookById")
-    @ResponseWrapper(localName = "deleteBookByIdResponse", targetNamespace = "http://impl.service.jaxws.anokhin.ru/", className = "ru.anokhin.jaxws.client.DeleteBookByIdResponse")
-    @Action(input = "http://impl.service.jaxws.anokhin.ru/BookService/deleteBookByIdRequest", output = "http://impl.service.jaxws.anokhin.ru/BookService/deleteBookByIdResponse")
-    public boolean deleteBookById(
+    @RequestWrapper(localName = "deleteById", targetNamespace = "http://impl.service.jaxws.anokhin.ru/", className = "ru.anokhin.jaxws.client.DeleteById")
+    @ResponseWrapper(localName = "deleteByIdResponse", targetNamespace = "http://impl.service.jaxws.anokhin.ru/", className = "ru.anokhin.jaxws.client.DeleteByIdResponse")
+    @Action(input = "http://impl.service.jaxws.anokhin.ru/BookService/deleteByIdRequest", output = "http://impl.service.jaxws.anokhin.ru/BookService/deleteByIdResponse")
+    public boolean deleteById(
         @WebParam(name = "arg0", targetNamespace = "")
         long arg0);
 

@@ -7,8 +7,9 @@ import ru.anokhin.jaxws.cli.CreateCommand
 import ru.anokhin.jaxws.cli.FindCommand
 import ru.anokhin.jaxws.cli.RemoveCommand
 import ru.anokhin.jaxws.cli.UpdateCommand
-import ru.anokhin.jaxws.client.BookService
 import ru.anokhin.jaxws.client.BookService_Service
+import ru.anokhin.jaxws.client.BookSoapServiceDelegate
+import ru.anokhin.jaxws.service.BookSoapService
 
 private const val WSDL_URL_ENV_VARIABLE: String = "WSDL_URL"
 
@@ -24,7 +25,8 @@ private fun resolveWsdlUrl(): URL =
 
 fun main(args: Array<String>) {
     val bookService = BookService_Service(resolveWsdlUrl())
-    val bookSoapService: BookService = bookService.bookServicePort
+    val bookServicePort = bookService.bookServicePort
+    val bookSoapService: BookSoapService = BookSoapServiceDelegate(bookServicePort)
 
     BooksCli()
         .subcommands(

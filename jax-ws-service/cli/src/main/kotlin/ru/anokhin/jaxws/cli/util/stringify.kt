@@ -1,6 +1,6 @@
 package ru.anokhin.jaxws.cli.util
 
-import ru.anokhin.jaxws.client.BookSoapDto
+import ru.anokhin.jaxws.model.dto.BookSoapDto
 
 fun BookSoapDto.stringify() = buildString {
     append("Book(")

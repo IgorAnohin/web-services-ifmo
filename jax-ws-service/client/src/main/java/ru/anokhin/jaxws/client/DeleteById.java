@@ -7,12 +7,12 @@ import jakarta.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for deleteBookById complex type.
+ * <p>Java class for deleteById complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="deleteBookById">
+ * &lt;complexType name="deleteById">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -26,10 +26,10 @@ import jakarta.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "deleteBookById", propOrder = {
+@XmlType(name = "deleteById", propOrder = {
     "arg0"
 })
-public class DeleteBookById {
+public class DeleteById {
 
     protected long arg0;
 
