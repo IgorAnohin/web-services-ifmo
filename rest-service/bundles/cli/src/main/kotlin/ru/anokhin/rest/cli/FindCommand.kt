@@ -36,7 +36,7 @@ class FindCommand constructor(
 
     override fun run() {
         val foundBooks: List<Book> = try {
-            bookClient.findByFilter(
+            bookClient.find(
                 BookFilter(
                     name = name,
                     author = author,

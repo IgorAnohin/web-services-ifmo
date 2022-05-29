@@ -33,11 +33,12 @@ class UpdateCommand constructor(
 
     private val publisher: String? by option(help = "Publisher")
 
-    private val publicationDate: LocalDate? by option(help = "Publication date in format dd-mm-yyyy (e.g. \"27-05-1984\")")
-        .convert {
-            val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
-            LocalDate.parse(it, formatter)
-        }
+    private val publicationDate: LocalDate? by option(
+        help = "Publication date in format yyyy-mm-dd (e.g. \"1984-05-27\")"
+    ).convert {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        LocalDate.parse(it, formatter)
+    }
 
     private val pageCount: Int? by option(help = "Pages count").int()
 

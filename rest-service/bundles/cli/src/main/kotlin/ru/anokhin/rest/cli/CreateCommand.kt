@@ -27,9 +27,9 @@ class CreateCommand constructor(
 
     private val publisher: String by option(help = "Publisher").required()
 
-    private val publicationDate: LocalDate by option(help = "Publication date in format dd-mm-yyyy (e.g. \"1984-05-27\")")
-        .convert { LocalDate.parse(it) }
-        .required()
+    private val publicationDate: LocalDate by option(
+        help = "Publication date in format yyyy-mm-dd (e.g. \"1984-05-27\")"
+    ).convert { LocalDate.parse(it) }.required()
 
     private val pageCount: Int by option(help = "Pages count").int().required()
 

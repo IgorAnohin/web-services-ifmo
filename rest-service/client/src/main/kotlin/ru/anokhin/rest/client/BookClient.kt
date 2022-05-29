@@ -11,11 +11,7 @@ import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.request.delete
-import io.ktor.client.request.get
-import io.ktor.client.request.post
-import io.ktor.client.request.put
-import io.ktor.client.request.setBody
+import io.ktor.client.request.*
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
@@ -26,6 +22,8 @@ import io.ktor.http.isSuccess
 import io.ktor.http.path
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ru.anokhin.rest.api.kotlin.extension.asServiceException
 import ru.anokhin.rest.api.model.Book
@@ -104,11 +102,17 @@ class BookClient {
         }.body()
     }
 
-    fun findByFilter(filter: BookFilter): List<Book> = runBlocking {
-        val response = client.post {
-            url.appendPathSegments("books", "find-by-filter")
+    fun find(filter: BookFilter): List<Book> = runBlocking {
+        val response = client.get {
+            url.apply {
+                appendPathSegments("books")
+                parameters.apply {
+                    for ((key, value) in Json.decodeFromString<Map<String, String>>(Json.encodeToString(filter))) {
+                        append(key, value)
+                    }
+                }
+            }
             contentType(ContentType.Application.Json)
-            setBody(filter)
         }
         if (response.status == HttpStatusCode.NotFound) {
             emptyList()

@@ -24,12 +24,11 @@ import ru.anokhin.core.service.BookService
 import ru.anokhin.rest.api.kotlin.extension.asErrorResponse
 import ru.anokhin.rest.api.model.Book
 import ru.anokhin.rest.api.model.BookCreationRequest
-import ru.anokhin.rest.api.model.BookFilter
 import ru.anokhin.rest.api.model.BookUpdateRequest
 import ru.anokhin.rest.api.model.ErrorModel
 import ru.anokhin.rest.api.model.ErrorResponse
+import java.time.LocalDate
 
-private typealias ApiBookFilter = BookFilter
 private typealias ModelBookFilter = ru.anokhin.core.model.dto.BookFilter
 
 private typealias ApiBook = Book
@@ -65,19 +64,21 @@ fun Route.bookRoutes(bookService: BookService) {
             }
         }
 
-        post("/find-by-filter") {
+        get {
             callService(
                 fn = {
-                    val filter = call.receive<ApiBookFilter>()
+                    val params = call.request.queryParameters
+                    val publicationDateFrom = if (params.contains("publicationDateFrom")) LocalDate.parse(params["publicationDateFrom"]) else null
+                    val publicationDateTo = if (params.contains("publicationDateTo")) LocalDate.parse(params["publicationDateTo"]) else null
                     bookService.findByFilter(
                         ModelBookFilter(
-                            name = filter.name,
-                            author = filter.author,
-                            publisher = filter.publisher,
-                            publicationDateFrom = filter.publicationDateFrom?.toJavaLocalDate(),
-                            publicationDateTo = filter.publicationDateTo?.toJavaLocalDate(),
-                            pageCountFrom = filter.pageCountFrom,
-                            pageCountTo = filter.pageCountTo,
+                            name = params["name"],
+                            author = params["author"],
+                            publisher = params["publisher"],
+                            publicationDateFrom = publicationDateFrom,
+                            publicationDateTo = publicationDateTo,
+                            pageCountFrom = params["pageCountFrom"]?.toInt(),
+                            pageCountTo = params["pageCountTo"]?.toInt(),
                         )
                     ).map(::toApiBook)
                 },
