@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="CliCreateExample" type="JetRunConfigurationType">
+  <configuration default="false" name="[CLI] Create Example" type="JetRunConfigurationType">
     <option name="MAIN_CLASS_NAME" value="ru.anokhin.jaxws.CliMainKt" />
     <module name="web-services-technologies-anokhin.jax-ws-service.cli.main" />
     <option name="PROGRAM_PARAMETERS" value="create --name Anokhin --authors Parent1,Parent2 --publisher &quot;Human Entertaiment&quot; --publication-date 19-02-1999 --page-count 22" />

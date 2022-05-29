@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="StandaloneMain" type="JetRunConfigurationType">
+  <configuration default="false" name="[App] Standalone Web Service" type="JetRunConfigurationType">
     <option name="MAIN_CLASS_NAME" value="ru.anokhin.jaxws.StandaloneMainKt" />
     <module name="web-services-technologies-anokhin.jax-ws-service.standalone.main" />
     <shortenClasspath name="NONE" />

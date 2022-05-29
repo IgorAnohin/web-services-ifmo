@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="CliHelp" type="JetRunConfigurationType">
+  <configuration default="false" name="[CLI] Create Help" type="JetRunConfigurationType">
     <option name="MAIN_CLASS_NAME" value="ru.anokhin.jaxws.CliMainKt" />
     <module name="web-services-technologies-anokhin.jax-ws-service.cli.main" />
     <option name="PROGRAM_PARAMETERS" value="create --help" />
