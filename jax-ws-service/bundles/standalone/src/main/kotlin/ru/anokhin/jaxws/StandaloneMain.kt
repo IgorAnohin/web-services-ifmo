@@ -21,18 +21,12 @@ fun main(args: Array<String>) {
         "false"
     )
 
-    val entityManagerFactory: EntityManagerFactory = Persistence.createEntityManagerFactory("ru.anokhin.jaxws")
+    val entityManagerFactory: EntityManagerFactory = Persistence.createEntityManagerFactory("ru.anokhin.web")
     val entityManager: EntityManager = entityManagerFactory.createEntityManager()
 
-    val bookDao: BookDao = StandaloneBookDao().apply {
-        this.entityManager = entityManager
-    }
-    val bookService: BookService = BookServiceImpl().apply {
-        this.bookDao = bookDao
-    }
-    val bookSoapService: BookSoapService = BookSoapServiceImpl().apply {
-        this.bookService = bookService
-    }
+    val bookDao: BookDao = StandaloneBookDao(entityManager)
+    val bookService: BookService = BookServiceImpl(bookDao)
+    val bookSoapService: BookSoapService = BookSoapServiceImpl(bookService)
 
     val readServiceUrl = "http://127.0.0.1:8080/jaxws/BookService"
     Endpoint.publish(readServiceUrl, bookSoapService)

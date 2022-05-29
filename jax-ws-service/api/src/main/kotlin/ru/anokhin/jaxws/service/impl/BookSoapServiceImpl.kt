@@ -14,10 +14,9 @@ import ru.anokhin.jaxws.model.dto.BookSoapDto
 import ru.anokhin.jaxws.service.BookSoapService
 
 @WebService(name = "BookService", serviceName = "BookService")
-class BookSoapServiceImpl : BookSoapService {
-
-    @Inject
-    lateinit var bookService: BookService
+class BookSoapServiceImpl @Inject constructor(
+    private val bookService: BookService,
+) : BookSoapService {
 
     override fun create(
         name: String,

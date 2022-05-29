@@ -3,6 +3,7 @@ hibernate = "6.0.0.Final"
 jersey = "3.0.4"
 jetty = "11.0.9"
 jakarta-xml = "4.0.0"
+jakarta-jakartaee = "9.1.0"
 
 ktor = "2.0.1"
 clikt = "3.4.2"
@@ -27,7 +28,11 @@ jakarta-xml-wsApi = { module = "jakarta.xml.ws:jakarta.xml.ws-api", version.ref 
 jakarta-jwsApi = { module = "jakarta.jws:jakarta.jws-api", version = "3.0.0" } # https://mvnrepository.com/artifact/jakarta.jws/jakarta.jws-api
 jakarta-annotationApi = { module = "jakarta.annotation:jakarta.annotation-api", version = "2.1.0" } # https://mvnrepository.com/artifact/jakarta.annotation/jakarta.annotation-api
 jakarta-persistenceApi = { module = "jakarta.persistence:jakarta.persistence-api", version = "3.1.0" } # https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api
+jakarta-servletApi = { module = "jakarta.servlet:jakarta.servlet-api", version = "5.0.0" } # https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api
 jakarta-injectApi = { module = "jakarta.inject:jakarta.inject-api", version = "2.0.1" } # https://mvnrepository.com/artifact/jakarta.inject/jakarta.inject-api
+
+jakarta-jakartaee-api = { module = "jakarta.platform:jakarta.jakartaee-api", version.ref = "jakarta-jakartaee" } # https://mvnrepository.com/artifact/jakarta.platform/jakarta.jakartaee-api
+jakarta-jakartaee-webApi = { module = "jakarta.platform:jakarta.jakartaee-web-api", version.ref = "jakarta-jakartaee" } # https://mvnrepository.com/artifact/jakarta.platform/jakarta.jakartaee-web-api
 
 sun-xml-jaxwsRt = { module = "com.sun.xml.ws:jaxws-rt", version = "3.0.2" } # https://mvnrepository.com/artifact/com.sun.xml.ws/jaxws-rt
 
@@ -35,6 +40,7 @@ ktor-server-contentNegotiation = { module = "io.ktor:ktor-server-content-negotia
 ktor-server-defaultHeaders = { module = "io.ktor:ktor-server-default-headers", version.ref = "ktor" } # https://mvnrepository.com/artifact/io.ktor/ktor-server-default-headers
 ktor-server-callLogging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktor" } # https://mvnrepository.com/artifact/io.ktor/ktor-server-call-logging
 ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" } # https://mvnrepository.com/artifact/io.ktor/ktor-server-netty
+ktor-server-servlet = { module = "io.ktor:ktor-server-servlet", version.ref = "ktor" } # https://mvnrepository.com/artifact/io.ktor/ktor-server-servlet
 ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" } # https://mvnrepository.com/artifact/io.ktor/ktor-server-core
 
 ktor-client-contentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" } # https://mvnrepository.com/artifact/io.ktor/ktor-client-content-negotiation
@@ -66,7 +72,7 @@ kotlin-stdlib-jdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", versi
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" } # https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" } # https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-test
 
-jdbcDrivers-postgresql = { module = "org.postgresql:postgresql", version = "42.3.4" } # https://mvnrepository.com/artifact/org.postgresql/postgresql
+jdbcDrivers-postgresql = { module = "org.postgresql:postgresql", version = "42.3.5" } # https://mvnrepository.com/artifact/org.postgresql/postgresql
 
 [bundles]
 kotlin = [

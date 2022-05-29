@@ -16,10 +16,12 @@ private suspend fun PipelineContext<*, ApplicationCall>.redirectToLinkedIn() =
 
 fun Application.configureRouting(bookService: BookService) {
     routing {
-        get("/") { redirectToLinkedIn() }
-        route("/api/v1") {
+        route("/rest") {
             get("/") { redirectToLinkedIn() }
-            bookRoutes(bookService)
+            route("/api/v1") {
+                get("/") { redirectToLinkedIn() }
+                bookRoutes(bookService)
+            }
         }
     }
 }

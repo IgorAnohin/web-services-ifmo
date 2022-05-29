@@ -20,12 +20,11 @@ import ru.anokhin.core.model.jpa.Book
 import ru.anokhin.core.service.BookService
 
 @Singleton
-class BookServiceImpl : BookService {
+class BookServiceImpl @Inject constructor(
+    private val bookDao: BookDao,
+) : BookService {
 
     private val logger: KLogger = LoggerFactory.getLogger(this::class.java).toKLogger()
-
-    @Inject
-    lateinit var bookDao: BookDao
 
     override fun save(book: BookSaveDto): BookDto {
         logger.entry(book)

@@ -40,7 +40,7 @@ class BookClient {
 
     private val client: HttpClient = HttpClient(CIO) {
         defaultRequest {
-            url("http://0.0.0.0:4242/api/v1/books")
+            url("http://0.0.0.0:8080/rest/api/v1/books")
         }
         Charsets {
             register(Charsets.UTF_8)

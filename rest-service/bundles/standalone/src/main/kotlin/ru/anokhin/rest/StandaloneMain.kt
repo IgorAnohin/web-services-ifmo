@@ -19,17 +19,13 @@ import ru.anokhin.rest.plugin.configureSerialization
 private val logger: KLogger = KotlinLogging.logger {}
 
 fun main() {
-    val entityManagerFactory: EntityManagerFactory = Persistence.createEntityManagerFactory("ru.anokhin.jaxws")
+    val entityManagerFactory: EntityManagerFactory = Persistence.createEntityManagerFactory("ru.anokhin.web")
     val entityManager: EntityManager = entityManagerFactory.createEntityManager()
 
-    val bookDao: BookDao = StandaloneBookDao().apply {
-        this.entityManager = entityManager
-    }
-    val bookService: BookService = BookServiceImpl().apply {
-        this.bookDao = bookDao
-    }
+    val bookDao: BookDao = StandaloneBookDao(entityManager)
+    val bookService: BookService = BookServiceImpl(bookDao)
 
-    embeddedServer(Netty, port = 4242, host = "0.0.0.0") {
+    embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
         configureRouting(bookService)
         configureSerialization()
         configureMonitoring()

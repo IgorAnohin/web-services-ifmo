@@ -11,9 +11,9 @@ import jakarta.persistence.criteria.Root
 import ru.anokhin.core.dao.BookDao
 import ru.anokhin.core.model.jpa.Book
 
-class StandaloneBookDao : BookDao {
-
-    lateinit var entityManager: EntityManager
+class StandaloneBookDao constructor(
+    private val entityManager: EntityManager,
+) : BookDao {
 
     override fun save(entity: Book): Book = inTransaction { entityManager.merge(entity) }
 

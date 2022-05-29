@@ -16,7 +16,7 @@ import ru.anokhin.core.model.jpa.Book
 @Singleton
 class CdiBookDao : BookDao {
 
-    @PersistenceContext(unitName = "ru.anokhin.jaxws")
+    @PersistenceContext(unitName = "ru.anokhin.web")
     lateinit var entityManager: EntityManager
 
     @Transactional
