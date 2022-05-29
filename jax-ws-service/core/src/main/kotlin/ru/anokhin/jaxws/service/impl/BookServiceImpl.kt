@@ -69,7 +69,7 @@ class BookServiceImpl : BookService {
             )
             if (Params.AUTHORS_LIKE in params) add(
                 cb.like(
-                    cb.lower(root[Book.AUTHORS]),
+                    cb.lower(root.get<List<String>>(Book.AUTHORS).`as`(String::class.java)),
                     cb.parameter(String::class.java, Params.AUTHORS_LIKE)
                 )
             )
