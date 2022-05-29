@@ -11,7 +11,6 @@ import jakarta.persistence.criteria.Predicate
 import jakarta.persistence.criteria.Root
 import jakarta.transaction.Transactional
 import ru.anokhin.jaxws.dao.BookDao
-import ru.anokhin.jaxws.exception.DaoException
 import ru.anokhin.jaxws.model.jpa.Book
 
 @Singleton
@@ -24,8 +23,7 @@ class CdiBookDao : BookDao {
     override fun save(entity: Book): Book = entityManager.merge(entity)
 
     @Transactional
-    override fun findById(id: Long): Book = entityManager.find(Book::class.java, id)
-        ?: run { throw DaoException("Entity Book(id=$id) could not be found") }
+    override fun findById(id: Long): Book? = entityManager.find(Book::class.java, id)
 
     @Transactional
     override fun findByCondition(

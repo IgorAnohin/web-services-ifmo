@@ -18,7 +18,6 @@ dependencies {
     api(libs.jakarta.annotationApi)
     api(libs.jakarta.persistenceApi)
     api(libs.jakarta.injectApi)
-    api(libs.jakarta.jwsApi)
 
     api(libs.kotlinLogging.jvm)
     api(libs.kotlinx.serialization.jsonJvm)

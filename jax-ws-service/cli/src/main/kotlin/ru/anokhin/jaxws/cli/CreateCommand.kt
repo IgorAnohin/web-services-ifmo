@@ -8,8 +8,12 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.int
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import ru.anokhin.jaxws.ErrorCodes
+import ru.anokhin.jaxws.cli.util.printError
+import ru.anokhin.jaxws.cli.util.printUnknownError
 import ru.anokhin.jaxws.cli.util.stringify
 import ru.anokhin.jaxws.cli.util.toDate
+import ru.anokhin.jaxws.exception.ServiceException
 import ru.anokhin.jaxws.service.BookSoapService
 
 class CreateCommand constructor(
@@ -35,12 +39,24 @@ class CreateCommand constructor(
     private val pageCount: Int by option(help = "Pages count").int().required()
 
     override fun run() {
-        bookSoapService.create(
-            name = name,
-            authors = authors,
-            publisher = publisher,
-            publicationDate = publicationDate.toDate(),
-            pageCount = pageCount
-        ).also { book -> println("Created book: ${book.stringify()}") }
+        try {
+            bookSoapService.create(
+                name = name,
+                authors = authors,
+                publisher = publisher,
+                publicationDate = publicationDate.toDate(),
+                pageCount = pageCount
+            ).also { book -> println("Created book: ${book.stringify()}") }
+        } catch (ex: ServiceException) {
+            when (ex.code) {
+                ErrorCodes.Books002NameIsBlank -> printError("Name cannot be blank")
+                ErrorCodes.Books003AuthorsListIsEmpty -> printError("Authors list must not be empty")
+                ErrorCodes.Books004AuthorsIsBlank -> printError("Author cannot be blank")
+                ErrorCodes.Books005PublisherIsBlank -> printError("Publisher cannot be blank")
+                ErrorCodes.Books006PageCountIsNotPositive -> printError("Page count must be a positive number")
+                ErrorCodes.Books001UnknownError -> printUnknownError()
+                else -> printUnknownError()
+            }
+        }
     }
 }

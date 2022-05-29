@@ -3,10 +3,12 @@ package ru.anokhin.jaxws.service
 import jakarta.jws.WebMethod
 import jakarta.jws.WebParam
 import java.util.Date
+import ru.anokhin.jaxws.exception.ServiceException
 import ru.anokhin.jaxws.model.dto.BookSoapDto
 
 interface BookSoapService {
 
+    @Throws(ServiceException::class)
     @WebMethod(operationName = "create")
     fun create(
         @WebParam(name = "name") name: String,
@@ -16,11 +18,13 @@ interface BookSoapService {
         @WebParam(name = "pageCount") pageCount: Int,
     ): BookSoapDto
 
+    @Throws(ServiceException::class)
     @WebMethod(operationName = "findById")
     fun findById(
         @WebParam(name = "id") id: Long,
     ): BookSoapDto
 
+    @Throws(ServiceException::class)
     @WebMethod(operationName = "findByFilter")
     fun findByFilter(
         @WebParam(name = "name") name: String? = null,
@@ -32,6 +36,7 @@ interface BookSoapService {
         @WebParam(name = "pageCountTo") pageCountTo: Int? = null,
     ): List<BookSoapDto>
 
+    @Throws(ServiceException::class)
     @WebMethod(operationName = "update")
     fun update(
         @WebParam(name = "id") id: Long,
@@ -42,6 +47,7 @@ interface BookSoapService {
         @WebParam(name = "pageCount") pageCount: Int,
     ): BookSoapDto
 
+    @Throws(ServiceException::class)
     @WebMethod(operationName = "deleteById")
     fun deleteById(
         @WebParam(name = "id") id: Long,

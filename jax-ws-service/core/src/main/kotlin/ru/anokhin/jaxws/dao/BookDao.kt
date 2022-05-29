@@ -10,7 +10,7 @@ interface BookDao {
 
     fun save(entity: Book): Book
 
-    fun findById(id: Long): Book
+    fun findById(id: Long): Book?
 
     fun findByCondition(
         params: Map<String, Any>,

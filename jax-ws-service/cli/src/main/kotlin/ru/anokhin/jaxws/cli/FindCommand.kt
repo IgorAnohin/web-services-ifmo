@@ -6,8 +6,11 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.int
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import ru.anokhin.jaxws.ErrorCodes
+import ru.anokhin.jaxws.cli.util.printUnknownError
 import ru.anokhin.jaxws.cli.util.stringify
 import ru.anokhin.jaxws.cli.util.toDate
+import ru.anokhin.jaxws.exception.ServiceException
 import ru.anokhin.jaxws.model.dto.BookSoapDto
 import ru.anokhin.jaxws.service.BookSoapService
 
@@ -40,15 +43,22 @@ class FindCommand constructor(
     private val pageCountTo: Int? by option(help = "Pages count").int()
 
     override fun run() {
-        val foundBooks: List<BookSoapDto> = bookSoapService.findByFilter(
-            name = name,
-            author = author,
-            publisher = publisher,
-            publicationDateFrom = publicationDateFrom?.toDate(),
-            publicationDateTo = publicationDateTo?.toDate(),
-            pageCountFrom = pageCountFrom,
-            pageCountTo = pageCountTo,
-        )
+        val foundBooks: List<BookSoapDto> = try {
+            bookSoapService.findByFilter(
+                name = name,
+                author = author,
+                publisher = publisher,
+                publicationDateFrom = publicationDateFrom?.toDate(),
+                publicationDateTo = publicationDateTo?.toDate(),
+                pageCountFrom = pageCountFrom,
+                pageCountTo = pageCountTo,
+            )
+        } catch (ex: ServiceException) {
+            when (ex.code) {
+                ErrorCodes.Books001UnknownError -> printUnknownError()
+                else -> printUnknownError()
+            }
+        }
         when {
             foundBooks.isEmpty() -> println("Could not find any book by given filter")
             (foundBooks.size == 1) -> println("Found a single book: ${foundBooks.first().stringify()}")

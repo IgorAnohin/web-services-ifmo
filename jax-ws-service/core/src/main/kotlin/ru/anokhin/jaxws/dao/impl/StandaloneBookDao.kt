@@ -9,7 +9,6 @@ import jakarta.persistence.criteria.CriteriaQuery
 import jakarta.persistence.criteria.Predicate
 import jakarta.persistence.criteria.Root
 import ru.anokhin.jaxws.dao.BookDao
-import ru.anokhin.jaxws.exception.DaoException
 import ru.anokhin.jaxws.model.jpa.Book
 
 class StandaloneBookDao : BookDao {
@@ -18,10 +17,7 @@ class StandaloneBookDao : BookDao {
 
     override fun save(entity: Book): Book = inTransaction { entityManager.merge(entity) }
 
-    override fun findById(id: Long): Book = inTransaction {
-        entityManager.find(Book::class.java, id)
-            ?: run { throw DaoException("Entity Book(id=$id) could not be found") }
-    }
+    override fun findById(id: Long): Book? = inTransaction { entityManager.find(Book::class.java, id) }
 
     override fun findByCondition(
         params: Map<String, Any>,
@@ -65,7 +61,7 @@ class StandaloneBookDao : BookDao {
             closure()
         } catch (ex: Exception) {
             transaction.rollback()
-            throw if (ex is DaoException) ex else DaoException("Exception happened during transactional execution", ex)
+            throw ex
         }
         transaction.commit()
 

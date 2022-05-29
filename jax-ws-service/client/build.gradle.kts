@@ -1,6 +1,5 @@
 dependencies {
     api(projects.jaxWsService.model)
-    api(libs.jakarta.xml.wsApi)
 
     implementation(libs.jersey.client)
 

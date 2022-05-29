@@ -9,8 +9,12 @@ import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.clikt.parameters.types.long
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import ru.anokhin.jaxws.ErrorCodes
+import ru.anokhin.jaxws.cli.util.printError
+import ru.anokhin.jaxws.cli.util.printUnknownError
 import ru.anokhin.jaxws.cli.util.stringify
 import ru.anokhin.jaxws.cli.util.toDate
+import ru.anokhin.jaxws.exception.ServiceException
 import ru.anokhin.jaxws.model.dto.BookSoapDto
 import ru.anokhin.jaxws.service.BookSoapService
 
@@ -38,16 +42,39 @@ class UpdateCommand constructor(
     private val pageCount: Int? by option(help = "Pages count").int()
 
     override fun run() {
-        val existingBook: BookSoapDto = bookSoapService.findById(id)
-        val updatedBook: BookSoapDto = bookSoapService.update(
-            id = id,
-            name = this@UpdateCommand.name ?: existingBook.name!!,
-            authors = this@UpdateCommand.authors.takeIf(List<*>::isNotEmpty) ?: existingBook.authors,
-            publisher = this@UpdateCommand.publisher ?: existingBook.publisher!!,
-            publicationDate = this@UpdateCommand.publicationDate?.toDate()
-                ?: existingBook.publicationDate?.toDate()!!,
-            pageCount = this@UpdateCommand.pageCount ?: existingBook.pageCount!!
-        )
+        val existingBook: BookSoapDto = try {
+            bookSoapService.findById(id)
+        } catch (ex: ServiceException) {
+            when (ex.code) {
+                ErrorCodes.Books007EntityNotFound -> printError("Entity with id $id was not found")
+                ErrorCodes.Books001UnknownError -> printUnknownError()
+                else -> printUnknownError()
+            }
+        }
+
+        val updatedBook: BookSoapDto = try {
+            bookSoapService.update(
+                id = id,
+                name = this@UpdateCommand.name ?: existingBook.name!!,
+                authors = this@UpdateCommand.authors.takeIf(List<*>::isNotEmpty) ?: existingBook.authors,
+                publisher = this@UpdateCommand.publisher ?: existingBook.publisher!!,
+                publicationDate = this@UpdateCommand.publicationDate?.toDate()
+                    ?: existingBook.publicationDate?.toDate()!!,
+                pageCount = this@UpdateCommand.pageCount ?: existingBook.pageCount!!
+            )
+        } catch (ex: ServiceException) {
+            when (ex.code) {
+                ErrorCodes.Books002NameIsBlank -> printError("Name cannot be blank")
+                ErrorCodes.Books003AuthorsListIsEmpty -> printError("Authors list must not be empty")
+                ErrorCodes.Books004AuthorsIsBlank -> printError("Author cannot be blank")
+                ErrorCodes.Books005PublisherIsBlank -> printError("Publisher cannot be blank")
+                ErrorCodes.Books006PageCountIsNotPositive -> printError("Page count must be a positive number")
+                ErrorCodes.Books007EntityNotFound -> printError("Entity with id $id was not found")
+                ErrorCodes.Books001UnknownError -> printUnknownError()
+                else -> printUnknownError()
+            }
+        }
+
         println("Updated book by id $id: ${updatedBook.stringify()}")
     }
 }

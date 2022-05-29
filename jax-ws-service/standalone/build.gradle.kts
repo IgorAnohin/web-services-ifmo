@@ -9,6 +9,4 @@ dependencies {
     runtimeOnly(libs.sun.xml.jaxwsRt)
 
     implementation(projects.jaxWsService.core)
-
-    implementation(libs.jakarta.xml.wsApi)
 }

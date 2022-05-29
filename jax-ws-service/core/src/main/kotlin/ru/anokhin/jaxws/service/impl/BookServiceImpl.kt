@@ -10,7 +10,9 @@ import java.time.LocalDate
 import mu.KLogger
 import mu.toKLogger
 import org.slf4j.LoggerFactory
+import ru.anokhin.jaxws.ErrorCodes
 import ru.anokhin.jaxws.dao.BookDao
+import ru.anokhin.jaxws.exception.ServiceException
 import ru.anokhin.jaxws.model.dto.BookDto
 import ru.anokhin.jaxws.model.dto.BookFilter
 import ru.anokhin.jaxws.model.dto.BookSaveDto
@@ -27,6 +29,23 @@ class BookServiceImpl : BookService {
 
     override fun save(book: BookSaveDto): BookDto {
         logger.entry(book)
+
+        if (book.name.isBlank()) {
+            throw ServiceException(ErrorCodes.Books002NameIsBlank).also(logger::throwing)
+        }
+        if (book.authors.isEmpty()) {
+            throw ServiceException(ErrorCodes.Books003AuthorsListIsEmpty).also(logger::throwing)
+        }
+        if (book.authors.any(String::isBlank)) {
+            throw ServiceException(ErrorCodes.Books004AuthorsIsBlank).also(logger::throwing)
+        }
+        if (book.publisher.isBlank()) {
+            throw ServiceException(ErrorCodes.Books005PublisherIsBlank).also(logger::throwing)
+        }
+        if (book.pageCount <= 0) {
+            throw ServiceException(ErrorCodes.Books006PageCountIsNotPositive).also(logger::throwing)
+        }
+
         val entity = Book().apply {
             this.id = book.id
             this.name = book.name
@@ -35,7 +54,7 @@ class BookServiceImpl : BookService {
             this.publisher = book.publisher
             this.publicationDate = book.publicationDate
         }
-        return bookDao.save(entity)
+        return withDao { save(entity) }
             .let(::toBookDto)
             .also {
                 logger.info { "Created [$it]" }
@@ -45,24 +64,27 @@ class BookServiceImpl : BookService {
 
     override fun findById(id: Long): BookDto {
         logger.entry(id)
-        return bookDao.findById(id)
-            .let(::toBookDto)
-            .also(logger::exit)
+        val entity: Book = withDao { findById(id) } ?: run {
+            throw ServiceException(ErrorCodes.Books007EntityNotFound)
+                .also(logger::throwing)
+        }
+        return entity.let(::toBookDto).also(logger::exit)
     }
 
     override fun findByFilter(filter: BookFilter): List<BookDto> {
         logger.entry(filter)
         val params = toParamsMap(filter)
-        val entityList = bookDao.findByCondition(params, createPredicateBuilder(params))
+        val entityList = withDao { findByCondition(params, createPredicateBuilder(params)) }
         return entityList.map(::toBookDto)
             .also(logger::exit)
     }
 
-    override fun remove(id: Long): Boolean = bookDao.remove(id).also { removed ->
-        if (removed) {
-            logger.info { "Removed Book(id=$id)" }
+    override fun remove(id: Long): Boolean = withDao { remove(id) }
+        .also { removed ->
+            if (removed) {
+                logger.info { "Removed Book(id=$id)" }
+            }
         }
-    }
 
     private fun createPredicateBuilder(
         params: Map<String, Any>,
@@ -132,6 +154,13 @@ class BookServiceImpl : BookService {
         filter.pageCountFrom?.let { put(Params.PAGE_COUNT_FROM, it) }
         filter.pageCountTo?.let { put(Params.PAGE_COUNT_TO, it) }
     }
+
+    private fun <T> withDao(closure: BookDao.() -> T): T =
+        try {
+            closure(bookDao)
+        } catch (ex: Exception) {
+            throw ServiceException(ErrorCodes.Books001UnknownError, ex)
+        }
 
     private companion object {
 
