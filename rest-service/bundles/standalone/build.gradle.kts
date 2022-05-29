@@ -11,10 +11,7 @@ application {
 dependencies {
     runtimeOnly(libs.jdbcDrivers.postgresql)
 
-    api(projects.serviceCore.core)
-    api(projects.restService.apiModel)
-
-    implementation(libs.ktor.server.core)
+    implementation(projects.restService.api)
     implementation(libs.ktor.server.callLogging)
     implementation(libs.ktor.server.netty)
     implementation(libs.ktor.server.contentNegotiation)

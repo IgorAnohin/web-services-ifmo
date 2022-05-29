@@ -30,35 +30,6 @@ private typealias ModelBookFilter = ru.anokhin.core.model.dto.BookFilter
 private typealias ApiBook = Book
 private typealias ModelBook = ru.anokhin.core.model.dto.BookDto
 
-private suspend inline fun <reified T : Any> PipelineContext<Unit, ApplicationCall>.runService(
-    fn: PipelineContext<Unit, ApplicationCall>.() -> T,
-): Unit = callService(
-    fn = fn,
-    callback = { result -> call.respond(result) }
-)
-
-private suspend inline fun <T> PipelineContext<Unit, ApplicationCall>.callService(
-    fn: PipelineContext<Unit, ApplicationCall>.() -> T,
-    callback: PipelineContext<Unit, ApplicationCall>.(T) -> Unit = {},
-): Unit = try {
-    callback.invoke(this, fn())
-} catch (ex: ServiceException) {
-    val errorResponse = ex.asErrorResponse()
-    call.respond(
-        HttpStatusCode.BadRequest,
-        errorResponse
-    )
-}
-
-private fun toApiBook(entity: ModelBook): ApiBook = ApiBook(
-    id = entity.id,
-    name = entity.name,
-    authors = entity.authors,
-    publisher = entity.publisher,
-    publicationDate = entity.publicationDate.toKotlinLocalDate(),
-    pageCount = entity.pageCount,
-)
-
 fun Route.bookRoutes(bookService: BookService) {
 
     route("/books") {
@@ -155,4 +126,33 @@ fun Route.bookRoutes(bookService: BookService) {
             )
         }
     }
+}
+
+private fun toApiBook(entity: ModelBook): ApiBook = ApiBook(
+    id = entity.id,
+    name = entity.name,
+    authors = entity.authors,
+    publisher = entity.publisher,
+    publicationDate = entity.publicationDate.toKotlinLocalDate(),
+    pageCount = entity.pageCount,
+)
+
+private suspend inline fun <reified T : Any> PipelineContext<Unit, ApplicationCall>.runService(
+    fn: PipelineContext<Unit, ApplicationCall>.() -> T,
+): Unit = callService(
+    fn = fn,
+    callback = { result -> call.respond(result) }
+)
+
+private suspend inline fun <T> PipelineContext<Unit, ApplicationCall>.callService(
+    fn: PipelineContext<Unit, ApplicationCall>.() -> T,
+    callback: PipelineContext<Unit, ApplicationCall>.(T) -> Unit = {},
+): Unit = try {
+    callback.invoke(this, fn())
+} catch (ex: ServiceException) {
+    val errorResponse = ex.asErrorResponse()
+    call.respond(
+        HttpStatusCode.BadRequest,
+        errorResponse
+    )
 }
