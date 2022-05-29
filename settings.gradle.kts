@@ -4,8 +4,8 @@ rootProject.name = "web-services-technologies-anokhin"
 
 include(":jax-ws-service")
 include(":jax-ws-service:client")
-include(":jax-ws-service:model")
-include(":jax-ws-service:model-impl")
+include(":jax-ws-service:api-model")
+include(":jax-ws-service:api")
 
 include(":jax-ws-service:bundles:cli")
 include(":jax-ws-service:bundles:j2ee")

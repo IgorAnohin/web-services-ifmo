@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.jaxWsService.modelImpl)
+    implementation(projects.jaxWsService.api)
 }

@@ -1,5 +1,5 @@
 dependencies {
-    api(projects.jaxWsService.model)
+    api(projects.jaxWsService.apiModel)
 
     implementation(libs.jersey.client)
 

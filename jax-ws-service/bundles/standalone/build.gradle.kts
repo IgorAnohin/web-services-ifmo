@@ -8,5 +8,5 @@ dependencies {
     runtimeOnly(libs.jdbcDrivers.postgresql)
     runtimeOnly(libs.sun.xml.jaxwsRt)
 
-    implementation(projects.jaxWsService.modelImpl)
+    implementation(projects.jaxWsService.api)
 }
