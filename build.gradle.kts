@@ -16,10 +16,10 @@ allprojects {
     }
 }
 
+val javaVersion: String = libs.versions.java.get()
+
 subprojects {
     apply<KotlinPlatformJvmPlugin>()
-
-    val javaVersion = "11"
 
     tasks {
         withType<Test>() {
