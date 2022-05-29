@@ -1,4 +1,4 @@
-package ru.anokhin.jaxws
+package ru.anokhin.jaxws.cli.util
 
 import com.github.ajalt.clikt.output.CliktHelpFormatter
 import com.github.ajalt.clikt.output.HelpFormatter
