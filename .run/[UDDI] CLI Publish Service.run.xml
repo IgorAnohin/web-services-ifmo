@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="[UDDI] CLI Publish Service" type="JetRunConfigurationType">
+    <option name="MAIN_CLASS_NAME" value="ru.anokhin.juddi.CliMainKt" />
+    <module name="web-services-technologies-anokhin.juddi-cli.main" />
+    <option name="PROGRAM_PARAMETERS" value="publish --business-key my-business --service-name inquiry --wsdl-url http://localhost:8080/juddiv3/services/inquiryv2\?wsdl" />
+    <shortenClasspath name="NONE" />
+    <extension name="software.aws.toolkits.jetbrains.core.execution.JavaAwsConnectionExtension">
+      <option name="credential" />
+      <option name="region" />
+      <option name="useCurrentConnection" value="false" />
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

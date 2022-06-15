@@ -22,3 +22,5 @@ include(":rest-service:bundles:standalone")
 
 include(":service-core:core")
 include(":service-core:core-model")
+
+include(":juddi-cli")

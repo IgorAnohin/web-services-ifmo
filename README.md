@@ -24,9 +24,11 @@ Download Glassfish and start domain
 
 ```shell
 INSTALL_DIR=$(mktemp -d)
-wget -O $INSTALL_DIR/'glassfish-6.2.5.zip' \
+GLASSFISH_ARCHIVE=$INSTALL_DIR/'glassfish-6.2.5.zip'
+wget -O $GLASSFISH_ARCHIVE \
     'https://www.eclipse.org/downloads/download.php?file=/ee4j/glassfish/glassfish-6.2.5.zip'
-unzip $INSTALL_DIR/glassfish-6.2.5.zip -d $INSTALL_DIR
+unzip $GLASSFISH_ARCHIVE -d $INSTALL_DIR
+rm $GLASSFISH_ARCHIVE
 
 GLASSFISH_HOME="$INSTALL_DIR/glassfish6"
 wget -O $GLASSFISH_HOME/glassfish/lib/postgresql-42.3.5.jar \
@@ -185,4 +187,80 @@ rest_cli update \
     
 # Remove book
 rest_cli remove --id 1
+```
+
+---
+
+## Lab 7. Publish and browse jUDDI services
+
+### Initializing environment 
+
+Install SDKMAN and JDK 8
+
+```shell
+curl -s "https://get.sdkman.io" | bash
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+sdk install java 8.0.332-tem
+sdk install java 17.0.3-tem
+```
+
+### Installing jUDDI
+
+Open a separate terminal window.
+Install and start jUDDI
+
+```shell
+sdk use java 8.0.332-tem
+
+INSTALL_DIR=$(mktemp -d)
+UDDI_ARCHIVE=$INSTALL_DIR/'juddi-distro-3.3.10.zip'
+wget -O $UDDI_ARCHIVE 'https://dlcdn.apache.org/juddi/juddi/3.3.10/juddi-distro-3.3.10.zip'
+unzip $UDDI_ARCHIVE -d $INSTALL_DIR
+rm $UDDI_ARCHIVE
+
+UDDI_HOME=$INSTALL_DIR/juddi-distro-3.3.10/juddi-tomcat-3.3.10
+
+SETENV_FILE="${JUDDI_HOME}/${UDDI_HOME}/bin/setenv.sh"
+echo 'export JAVA_OPTS="-Djavax.xml.accessExternalDTD=all"' > ${SETENV_FILE}
+chmod +x ${SETENV_FILE}
+
+${JUDDI_HOME}/${UDDI_HOME}/bin/startup.sh # use shutdown.sh to stop jUDDI
+```
+
+jUDDI Web GUI will be available by the URL: http://localhost:8080/juddi-gui/home.jsp
+
+Configure a new business entity with key `my-business`.
+
+![jUDDI Business Editor](docs/img/juddi_business_entity_creation.png)
+
+### Installing CLI
+
+Open a separate terminal window.
+Build and install jUDDI CLI
+
+```shell
+sdk use java 17.0.3-tem
+
+VERSION=$(awk -F= '$1=="version"{print $2}' gradle.properties)
+ARCHIVE_ID="juddi-cli-$VERSION"
+JUDDI_CLI_INSTALL_DIR=$(mktemp -d)
+TEMP_DIR=$(mktemp -d)
+
+./gradlew build
+unzip -q "juddi-cli/build/distributions/$ARCHIVE_ID.zip" -d "$TEMP_DIR"
+rsync --remove-source-files -r "$TEMP_DIR"/"$ARCHIVE_ID"/* "$JUDDI_CLI_INSTALL_DIR"
+
+alias juddi_cli="$JUDDI_CLI_INSTALL_DIR/bin/juddi-cli"
+```
+
+Use jUDDI CLI
+```shell
+# Publish service
+juddi_cli publish \
+    --business-key my-business \
+    --service-name inquiry \
+    --wsdl-url http://localhost:8080/juddiv3/services/inquiryv2\?wsdl
+
+# Browse service
+juddi_cli browse inquiry
 ```
