@@ -3,6 +3,7 @@ package ru.anokhin.rest.api
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.application.call
+import io.ktor.server.auth.authenticate
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
@@ -15,6 +16,7 @@ import io.ktor.server.routing.route
 import io.ktor.util.pipeline.PipelineContext
 import java.io.PrintWriter
 import java.io.StringWriter
+import java.time.LocalDate
 import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toKotlinLocalDate
 import ru.anokhin.core.ErrorCodes
@@ -27,7 +29,6 @@ import ru.anokhin.rest.api.model.BookCreationRequest
 import ru.anokhin.rest.api.model.BookUpdateRequest
 import ru.anokhin.rest.api.model.ErrorModel
 import ru.anokhin.rest.api.model.ErrorResponse
-import java.time.LocalDate
 
 private typealias ModelBookFilter = ru.anokhin.core.model.dto.BookFilter
 
@@ -38,18 +39,20 @@ fun Route.bookRoutes(bookService: BookService) {
 
     route("/books") {
 
-        post {
-            runService {
-                val request = call.receive<BookCreationRequest>()
-                bookService.save(
-                    BookSaveDto(
-                        name = request.name,
-                        authors = request.authors,
-                        publisher = request.publisher,
-                        publicationDate = request.publicationDate.toJavaLocalDate(),
-                        pageCount = request.pageCount,
-                    )
-                ).let(::toApiBook)
+        authenticate("auth-basic") {
+            post {
+                runService {
+                    val request = call.receive<BookCreationRequest>()
+                    bookService.save(
+                        BookSaveDto(
+                            name = request.name,
+                            authors = request.authors,
+                            publisher = request.publisher,
+                            publicationDate = request.publicationDate.toJavaLocalDate(),
+                            pageCount = request.pageCount,
+                        )
+                    ).let(::toApiBook)
+                }
             }
         }
 
@@ -92,44 +95,48 @@ fun Route.bookRoutes(bookService: BookService) {
             )
         }
 
-        put("{id?}") {
-            runService {
-                val id = call.parameters["id"]?.toLong() ?: return@put call.respondText(
-                    "Missing id",
-                    status = HttpStatusCode.BadRequest
-                )
-                val request = call.receive<BookUpdateRequest>()
-
-                bookService.save(
-                    BookSaveDto(
-                        id = id,
-                        name = request.name,
-                        authors = request.authors,
-                        publisher = request.publisher,
-                        publicationDate = request.publicationDate.toJavaLocalDate(),
-                        pageCount = request.pageCount,
-                    )
-                ).let(::toApiBook)
-            }
-        }
-
-        delete("{id?}") {
-            callService(
-                fn = {
-                    val id = call.parameters["id"]?.toLong() ?: return@delete call.respondText(
+        authenticate("auth-basic") {
+            put("{id?}") {
+                runService {
+                    val id = call.parameters["id"]?.toLong() ?: return@put call.respondText(
                         "Missing id",
                         status = HttpStatusCode.BadRequest
                     )
-                    bookService.remove(id)
-                },
-                callback = { removed ->
-                    if (removed) {
-                        call.respond(HttpStatusCode.OK)
-                    } else {
-                        call.respond(HttpStatusCode.NotFound)
-                    }
+                    val request = call.receive<BookUpdateRequest>()
+
+                    bookService.save(
+                        BookSaveDto(
+                            id = id,
+                            name = request.name,
+                            authors = request.authors,
+                            publisher = request.publisher,
+                            publicationDate = request.publicationDate.toJavaLocalDate(),
+                            pageCount = request.pageCount,
+                        )
+                    ).let(::toApiBook)
                 }
-            )
+            }
+        }
+
+        authenticate("auth-basic") {
+            delete("{id?}") {
+                callService(
+                    fn = {
+                        val id = call.parameters["id"]?.toLong() ?: return@delete call.respondText(
+                            "Missing id",
+                            status = HttpStatusCode.BadRequest
+                        )
+                        bookService.remove(id)
+                    },
+                    callback = { removed ->
+                        if (removed) {
+                            call.respond(HttpStatusCode.OK)
+                        } else {
+                            call.respond(HttpStatusCode.NotFound)
+                        }
+                    }
+                )
+            }
         }
     }
 }

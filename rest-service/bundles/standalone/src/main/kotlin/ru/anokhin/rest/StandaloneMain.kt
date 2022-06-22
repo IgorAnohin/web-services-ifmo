@@ -11,6 +11,7 @@ import ru.anokhin.core.dao.BookDao
 import ru.anokhin.core.dao.impl.StandaloneBookDao
 import ru.anokhin.core.service.BookService
 import ru.anokhin.core.service.impl.BookServiceImpl
+import ru.anokhin.rest.plugin.configureAuth
 import ru.anokhin.rest.plugin.configureHttp
 import ru.anokhin.rest.plugin.configureMonitoring
 import ru.anokhin.rest.plugin.configureRouting
@@ -26,6 +27,7 @@ fun main() {
     val bookService: BookService = BookServiceImpl(bookDao)
 
     embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
+        configureAuth()
         configureRouting(bookService)
         configureSerialization()
         configureMonitoring()

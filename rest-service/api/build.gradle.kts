@@ -8,5 +8,7 @@ dependencies {
     api(projects.restService.apiModel)
     api(projects.serviceCore.core)
 
+    api(libs.ktor.server.auth)
+
     implementation(libs.ktor.server.core)
 }
