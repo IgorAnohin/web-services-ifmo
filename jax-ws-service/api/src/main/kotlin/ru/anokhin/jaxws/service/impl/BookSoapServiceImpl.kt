@@ -23,6 +23,10 @@ class BookSoapServiceImpl @Inject constructor(
     private val bookService: BookService,
 ) : BookSoapService {
 
+    override fun uploadBinaryData(content: ByteArray) {
+        println(content)
+    }
+
     override fun create(
         name: String,
         authors: List<String>,

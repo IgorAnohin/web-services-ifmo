@@ -14,6 +14,10 @@ class BookSoapServiceDelegate(
     private val bookService: BookService,
 ) : BookSoapService {
 
+    override fun uploadBinaryData(content: ByteArray) = interceptException {
+        bookService.uploadBinaryData(content)
+    }
+
     override fun create(
         name: String,
         authors: List<String>,

@@ -8,6 +8,9 @@ import ru.anokhin.jaxws.model.dto.BookSoapDto
 
 interface BookSoapService {
 
+    @WebMethod(operationName = "uploadBinaryData")
+    fun uploadBinaryData(content: ByteArray)
+
     @Throws(ServiceException::class)
     @WebMethod(operationName = "create")
     fun create(

@@ -134,6 +134,18 @@ public interface BookService {
     /**
      * 
      * @param arg0
+     */
+    @WebMethod
+    @RequestWrapper(localName = "uploadBinaryData", targetNamespace = "http://impl.service.jaxws.anokhin.ru/", className = "ru.anokhin.jaxws.client.UploadBinaryData")
+    @ResponseWrapper(localName = "uploadBinaryDataResponse", targetNamespace = "http://impl.service.jaxws.anokhin.ru/", className = "ru.anokhin.jaxws.client.UploadBinaryDataResponse")
+    @Action(input = "http://impl.service.jaxws.anokhin.ru/BookService/uploadBinaryDataRequest", output = "http://impl.service.jaxws.anokhin.ru/BookService/uploadBinaryDataResponse")
+    public void uploadBinaryData(
+        @WebParam(name = "arg0", targetNamespace = "")
+        byte[] arg0);
+
+    /**
+     * 
+     * @param arg0
      * @return
      *     returns boolean
      */
