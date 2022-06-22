@@ -20,13 +20,15 @@ class BookSoapServiceDelegate(
         publisher: String,
         publicationDate: Date,
         pageCount: Int,
+        authToken: String,
     ): ModelBookSoapDto = interceptException {
         bookService.create(
             name,
             authors,
             publisher,
             publicationDate.toGregorianCalendar(),
-            pageCount
+            pageCount,
+            authToken,
         ).let(::toModelDto)
     }
 
@@ -61,6 +63,7 @@ class BookSoapServiceDelegate(
         publisher: String,
         publicationDate: Date,
         pageCount: Int,
+        authToken: String,
     ): ModelBookSoapDto = interceptException {
         bookService.update(
             id,
@@ -68,12 +71,13 @@ class BookSoapServiceDelegate(
             authors,
             publisher,
             publicationDate.toGregorianCalendar(),
-            pageCount
+            pageCount,
+            authToken,
         ).let(::toModelDto)
     }
 
-    override fun deleteById(id: Long): Boolean = interceptException {
-        bookService.deleteById(id)
+    override fun deleteById(id: Long, authToken: String): Boolean = interceptException {
+        bookService.deleteById(id, authToken)
     }
 
     private fun toModelDto(entity: JaxWsBookSoapDto): ModelBookSoapDto = ModelBookSoapDto().apply {

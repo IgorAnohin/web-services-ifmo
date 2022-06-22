@@ -11,6 +11,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import ru.anokhin.core.ErrorCodes
 import ru.anokhin.core.exception.ServiceException
+import ru.anokhin.jaxws.cli.util.generateHardcodedAuthToken
 import ru.anokhin.jaxws.cli.util.printError
 import ru.anokhin.jaxws.cli.util.printUnknownError
 import ru.anokhin.jaxws.cli.util.stringify
@@ -61,7 +62,8 @@ class UpdateCommand constructor(
                 publisher = this@UpdateCommand.publisher ?: existingBook.publisher!!,
                 publicationDate = this@UpdateCommand.publicationDate?.toDate()
                     ?: existingBook.publicationDate?.toDate()!!,
-                pageCount = this@UpdateCommand.pageCount ?: existingBook.pageCount!!
+                pageCount = this@UpdateCommand.pageCount ?: existingBook.pageCount!!,
+                authToken = generateHardcodedAuthToken(),
             )
         } catch (ex: ServiceException) {
             when (ex.code) {

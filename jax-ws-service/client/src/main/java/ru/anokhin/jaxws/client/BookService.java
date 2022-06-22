@@ -34,6 +34,7 @@ public interface BookService {
      * @param arg4
      * @param arg1
      * @param arg0
+     * @param arg6
      * @return
      *     returns ru.anokhin.jaxws.client.BookSoapDto
      */
@@ -54,12 +55,15 @@ public interface BookService {
         @WebParam(name = "arg4", targetNamespace = "")
         XMLGregorianCalendar arg4,
         @WebParam(name = "arg5", targetNamespace = "")
-        int arg5);
+        int arg5,
+        @WebParam(name = "arg6", targetNamespace = "")
+        String arg6);
 
     /**
      * 
      * @param arg3
      * @param arg2
+     * @param arg5
      * @param arg4
      * @param arg1
      * @param arg0
@@ -81,7 +85,9 @@ public interface BookService {
         @WebParam(name = "arg3", targetNamespace = "")
         XMLGregorianCalendar arg3,
         @WebParam(name = "arg4", targetNamespace = "")
-        int arg4);
+        int arg4,
+        @WebParam(name = "arg5", targetNamespace = "")
+        String arg5);
 
     /**
      * 
@@ -133,6 +139,7 @@ public interface BookService {
 
     /**
      * 
+     * @param arg1
      * @param arg0
      * @return
      *     returns boolean
@@ -144,6 +151,8 @@ public interface BookService {
     @Action(input = "http://impl.service.jaxws.anokhin.ru/BookService/deleteByIdRequest", output = "http://impl.service.jaxws.anokhin.ru/BookService/deleteByIdResponse")
     public boolean deleteById(
         @WebParam(name = "arg0", targetNamespace = "")
-        long arg0);
+        long arg0,
+        @WebParam(name = "arg1", targetNamespace = "")
+        String arg1);
 
 }

@@ -29,7 +29,9 @@ class BookSoapServiceImpl @Inject constructor(
         publisher: String,
         publicationDate: Date,
         pageCount: Int,
+        authToken: String,
     ): BookSoapDto = interceptServiceException {
+        checkAuth(authToken)
         bookService.save(
             BookSaveDto(
                 id = null,
@@ -75,7 +77,9 @@ class BookSoapServiceImpl @Inject constructor(
         publisher: String,
         publicationDate: Date,
         pageCount: Int,
+        authToken: String,
     ): BookSoapDto = interceptServiceException {
+        checkAuth(authToken)
         bookService.save(
             BookSaveDto(
                 id = id,
@@ -88,7 +92,8 @@ class BookSoapServiceImpl @Inject constructor(
         ).let(::toBookSoapDto)
     }
 
-    override fun deleteById(id: Long): Boolean = interceptServiceException {
+    override fun deleteById(id: Long, authToken: String): Boolean = interceptServiceException {
+        checkAuth(authToken)
         bookService.remove(id)
     }
 
@@ -116,4 +121,10 @@ class BookSoapServiceImpl @Inject constructor(
             )
             throw SOAPFaultException(soapFault)
         }
+
+    private fun checkAuth(token: String) {
+        if (token != "Basic bG9naW46cGFzc3dvcmQ=") {
+            throw RuntimeException("Invalid login or password")
+        }
+    }
 }

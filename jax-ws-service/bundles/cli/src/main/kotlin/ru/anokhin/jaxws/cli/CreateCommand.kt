@@ -10,6 +10,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import ru.anokhin.core.ErrorCodes
 import ru.anokhin.core.exception.ServiceException
+import ru.anokhin.jaxws.cli.util.generateHardcodedAuthToken
 import ru.anokhin.jaxws.cli.util.printError
 import ru.anokhin.jaxws.cli.util.printUnknownError
 import ru.anokhin.jaxws.cli.util.stringify
@@ -45,7 +46,8 @@ class CreateCommand constructor(
                 authors = authors,
                 publisher = publisher,
                 publicationDate = publicationDate.toDate(),
-                pageCount = pageCount
+                pageCount = pageCount,
+                authToken = generateHardcodedAuthToken(),
             ).also { book -> println("Created book: ${book.stringify()}") }
         } catch (ex: ServiceException) {
             when (ex.code) {

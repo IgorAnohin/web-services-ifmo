@@ -6,6 +6,7 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.long
 import ru.anokhin.core.ErrorCodes
 import ru.anokhin.core.exception.ServiceException
+import ru.anokhin.jaxws.cli.util.generateHardcodedAuthToken
 import ru.anokhin.jaxws.cli.util.printError
 import ru.anokhin.jaxws.cli.util.printUnknownError
 import ru.anokhin.jaxws.service.BookSoapService
@@ -18,7 +19,7 @@ class RemoveCommand constructor(
 
     override fun run() {
         val deleted: Boolean = try {
-            bookSoapService.deleteById(id = id)
+            bookSoapService.deleteById(id = id, authToken = generateHardcodedAuthToken())
         } catch (ex: ServiceException) {
             when (ex.code) {
                 ErrorCodes.Books002NameIsBlank -> printError("Name cannot be blank")

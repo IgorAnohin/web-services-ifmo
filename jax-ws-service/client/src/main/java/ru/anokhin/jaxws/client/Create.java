@@ -25,6 +25,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="arg2" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="arg3" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="arg4" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="arg5" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -39,7 +40,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "arg1",
     "arg2",
     "arg3",
-    "arg4"
+    "arg4",
+    "arg5"
 })
 public class Create {
 
@@ -49,6 +51,7 @@ public class Create {
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar arg3;
     protected int arg4;
+    protected String arg5;
 
     /**
      * Gets the value of the arg0 property.
@@ -165,6 +168,30 @@ public class Create {
      */
     public void setArg4(int value) {
         this.arg4 = value;
+    }
+
+    /**
+     * Gets the value of the arg5 property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getArg5() {
+        return arg5;
+    }
+
+    /**
+     * Sets the value of the arg5 property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setArg5(String value) {
+        this.arg5 = value;
     }
 
 }

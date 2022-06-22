@@ -16,6 +16,7 @@ interface BookSoapService {
         @WebParam(name = "publisher") publisher: String,
         @WebParam(name = "publicationDate") publicationDate: Date,
         @WebParam(name = "pageCount") pageCount: Int,
+        @WebParam(name = "authToken") authToken: String,
     ): BookSoapDto
 
     @Throws(ServiceException::class)
@@ -45,11 +46,13 @@ interface BookSoapService {
         @WebParam(name = "publisher") publisher: String,
         @WebParam(name = "publicationDate") publicationDate: Date,
         @WebParam(name = "pageCount") pageCount: Int,
+        @WebParam(name = "authToken") authToken: String,
     ): BookSoapDto
 
     @Throws(ServiceException::class)
     @WebMethod(operationName = "deleteById")
     fun deleteById(
         @WebParam(name = "id") id: Long,
+        @WebParam(name = "authToken") authToken: String,
     ): Boolean
 }
